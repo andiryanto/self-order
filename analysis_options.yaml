@@ -1,0 +1,11 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    - avoid_print
+    - prefer_const_constructors
+    - always_specify_types
+    - prefer_final_locals
+    - sort_constructors_first
+    - unnecessary_this
+    - use_key_in_widget_constructors
