@@ -7,28 +7,28 @@ class OnboardingView extends GetView<OnboardingController> {
 
   final List<Map<String, String>> onboardingPages = const [
     {
-      'title': 'Selamat Datang di Pranayama',
-      'subtitle': 'Temukan keseimbangan dalam setiap cangkir',
+      'title': 'Hai, Kaum Prana',
+      'subtitle': 'Selamat Datang di aplikasi Pranayama Social Area',
       'image': 'assets/images/yard.jpg',
     },
     {
-      'title': 'Nikmati Suasana Nyaman',
-      'subtitle': 'Tempat yang cocok untuk belajar dan bersantai',
+      'title': 'Bukan cuma enak, tapi menguntungkan',
+      'subtitle': 'Jajan hemat dengan promo dan harga special Kaum Prana',
       'image': 'assets/images/cup.jpg',
     },
     {
-      'title': 'Pesan Mudah dan Cepat',
-      'subtitle': 'Gunakan sistem self-order untuk pengalaman terbaik',
+      'title': 'Lebih dekat dengan info terupdate',
+      'subtitle': 'Khusus untuk kamu Kaum Prana',
       'image': 'assets/images/drink.jpg',
     },
     {
-      'title': 'Dukungan Komunitas',
-      'subtitle': 'Bergabung dengan komunitas kami dan dapatkan promo menarik',
+      'title': 'Cukup Scan dan Bayar, tanpa antre',
+      'subtitle': 'Solusi modern untuk pelayanan lebih cepat dan akurat',
       'image': 'assets/images/cashier.jpg',
     },
     {
-      'title': 'Ayo Mulai!',
-      'subtitle': 'Masuk dan rasakan sendiri keuntungannya',
+      'title': 'Pranayama Social Area',
+      'subtitle': 'FIND BALANCE EVERY CUP',
       'image': 'assets/images/hand.jpg',
     },
   ];
