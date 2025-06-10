@@ -5,39 +5,11 @@ import '../controllers/onboarding_controller.dart';
 class OnboardingView extends GetView<OnboardingController> {
   const OnboardingView({super.key});
 
-  final List<Map<String, String>> onboardingPages = const [
-    {
-      'title': 'Hai, Kaum Prana',
-      'subtitle': 'Selamat Datang di aplikasi Pranayama Social Area',
-      'image': 'assets/images/yard.jpg',
-    },
-    {
-      'title': 'Bukan cuma enak, tapi menguntungkan',
-      'subtitle': 'Jajan hemat dengan promo dan harga special Kaum Prana',
-      'image': 'assets/images/cup.jpg',
-    },
-    {
-      'title': 'Lebih dekat dengan info terupdate',
-      'subtitle': 'Khusus untuk kamu Kaum Prana',
-      'image': 'assets/images/drink.jpg',
-    },
-    {
-      'title': 'Cukup Scan dan Bayar, tanpa antre',
-      'subtitle': 'Solusi modern untuk pelayanan lebih cepat dan akurat',
-      'image': 'assets/images/cashier.jpg',
-    },
-    {
-      'title': 'Pranayama Social Area',
-      'subtitle': 'FIND BALANCE EVERY CUP',
-      'image': 'assets/images/hand.jpg',
-    },
-  ];
-
-  Widget _buildPageIndicator(int currentPage) {
+  Widget _buildPageIndicator(int currentPage, int totalPages) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List<Widget>.generate(
-        onboardingPages.length,
+        totalPages,
         (int index) => Container(
           margin: const EdgeInsets.symmetric(horizontal: 4),
           width: 8,
@@ -53,19 +25,20 @@ class OnboardingView extends GetView<OnboardingController> {
 
   @override
   Widget build(BuildContext context) {
+    final pages = controller.onboardingPages;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Stack(
           children: [
             Obx(() {
-              // langsung pakai controller.currentIndex.value
               return PageView.builder(
                 controller: controller.pageController,
-                itemCount: onboardingPages.length,
+                itemCount: pages.length,
                 onPageChanged: controller.onPageChanged,
                 itemBuilder: (BuildContext context, int index) {
-                  final Map<String, String> page = onboardingPages[index];
+                  final page = pages[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24, vertical: 40),
@@ -108,14 +81,14 @@ class OnboardingView extends GetView<OnboardingController> {
               bottom: 100,
               left: 0,
               right: 0,
-              child:
-                  Obx(() => _buildPageIndicator(controller.currentIndex.value)),
+              child: Obx(() => _buildPageIndicator(
+                  controller.currentIndex.value, pages.length)),
             ),
             Positioned(
               bottom: 40,
               left: 24,
               child: TextButton(
-                onPressed: () => controller.skip(),
+                onPressed: controller.skip,
                 child: const Text(
                   'Skip',
                   style: TextStyle(color: Colors.white, fontSize: 16),
@@ -126,15 +99,14 @@ class OnboardingView extends GetView<OnboardingController> {
               bottom: 40,
               right: 24,
               child: Obx(() => ElevatedButton(
-                    onPressed: () => controller.nextPage(),
+                    onPressed: controller.nextPage,
                     style: ElevatedButton.styleFrom(
                       shape: const CircleBorder(),
                       padding: const EdgeInsets.all(16),
                       backgroundColor: Colors.white,
                     ),
                     child: Icon(
-                      controller.currentIndex.value ==
-                              onboardingPages.length - 1
+                      controller.currentIndex.value == pages.length - 1
                           ? Icons.check
                           : Icons.arrow_forward,
                       color: Colors.black,
