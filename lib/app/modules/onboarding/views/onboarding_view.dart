@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:self_order/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import '../controllers/onboarding_controller.dart';
 
@@ -103,7 +104,7 @@ class OnboardingView extends GetView<OnboardingController> {
                               width: width * 0.8,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Get.toNamed('/login');
+                                  Get.offAllNamed(Routes.LOGIN);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
@@ -131,7 +132,7 @@ class OnboardingView extends GetView<OnboardingController> {
                               width: width * 0.8,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Get.toNamed('/register');
+                                  Get.offAllNamed(Routes.REGISTER);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,
@@ -182,7 +183,9 @@ class OnboardingView extends GetView<OnboardingController> {
                   bottom: 40,
                   left: 24,
                   child: TextButton(
-                    onPressed: controller.skip,
+                    onPressed: () {
+                      controller.skip();
+                    },
                     child: const Text(
                       'Skip',
                       style: TextStyle(color: Colors.white, fontSize: 16),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:self_order/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class OnboardingController extends GetxController {
@@ -34,10 +35,12 @@ class OnboardingController extends GetxController {
     },
   ];
 
+  // Update halaman ketika di-swipe
   void onPageChanged(int index) {
     currentIndex.value = index;
   }
 
+  // Pindah ke halaman selanjutnya
   void nextPage() {
     pageController.nextPage(
       duration: const Duration(milliseconds: 300),
@@ -45,8 +48,17 @@ class OnboardingController extends GetxController {
     );
   }
 
+  // Skip langsung ke login
   void skip() {
-    // TODO: Ganti dengan halaman tujuanmu jika user klik 'Skip'
-    Get.offAllNamed('/login');
+    Future.delayed(Duration(milliseconds: 300), () {
+      Get.offAllNamed(Routes.LOGIN);
+    });
+  }
+
+  // Jangan lupa dispose controllernya
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
   }
 }

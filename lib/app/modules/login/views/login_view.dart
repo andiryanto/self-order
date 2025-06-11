@@ -12,12 +12,7 @@ class LoginView extends GetView<LoginController> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Get.back(); // ganti dari Navigator.pop ke GetX
-          },
-        ),
+        automaticallyImplyLeading: false,
         title: const Text(
           "Masuk",
           style: TextStyle(
@@ -34,7 +29,7 @@ class LoginView extends GetView<LoginController> {
           child: Column(
             children: [
               Image.asset(
-                'assets/images/Pranayama.jpeg',
+                'assets/images/pranayama.jpeg',
                 height: 120,
               ),
               const SizedBox(height: 80),
@@ -49,6 +44,7 @@ class LoginView extends GetView<LoginController> {
               TextField(
                 controller: controller.phoneController,
                 keyboardType: TextInputType.phone,
+                cursorColor: Colors.black,
                 decoration: InputDecoration(
                   prefixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -58,6 +54,9 @@ class LoginView extends GetView<LoginController> {
                       const BoxConstraints(minWidth: 0, minHeight: 0),
                   hintText: 'Nomor ponsel anda',
                   border: const OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
@@ -72,9 +71,13 @@ class LoginView extends GetView<LoginController> {
               Obx(() => TextField(
                     controller: controller.passwordController,
                     obscureText: controller.obscurePassword.value,
+                    cursorColor: Colors.black,
                     decoration: InputDecoration(
                       hintText: 'Sandi anda',
                       border: const OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
                       suffixIcon: IconButton(
                         icon: Icon(controller.obscurePassword.value
                             ? Icons.visibility_off
