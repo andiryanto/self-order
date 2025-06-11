@@ -9,6 +9,7 @@ class OnboardingController extends GetxController {
     {
       'title': 'Hai, Kaum Prana',
       'subtitle': 'Selamat Datang di aplikasi Pranayama Social Area',
+      'extra': 'FIND BALANCE IN EVERY CUP.',
       'image': 'assets/images/yard.jpg',
     },
     {
@@ -38,15 +39,10 @@ class OnboardingController extends GetxController {
   }
 
   void nextPage() {
-    if (currentIndex.value == onboardingPages.length - 1) {
-      // TODO: Ganti dengan halaman tujuanmu setelah onboarding selesai
-      Get.offAllNamed('/login');
-    } else {
-      pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
+    pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
 
   void skip() {
