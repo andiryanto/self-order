@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:self_order/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import '../controllers/onboarding_controller.dart';
+import 'package:self_order/app/routes/app_pages.dart';
 
 class OnboardingView extends GetView<OnboardingController> {
   const OnboardingView({super.key});
@@ -100,61 +100,71 @@ class OnboardingView extends GetView<OnboardingController> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(
-                              width: width * 0.8,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Get.offAllNamed(Routes.LOGIN);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  elevation: 0,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    side: const BorderSide(
-                                        color: Colors.white, width: 1),
+                            Obx(() => SizedBox(
+                                  width: width * 0.8,
+                                  child: ElevatedButton(
+                                    onPressed:
+                                        controller.handleLoginButtonPress,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      elevation: 0,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 14),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        side: const BorderSide(
+                                            color: Colors.white, width: 1),
+                                      ),
+                                    ),
+                                    child: Opacity(
+                                      opacity:
+                                          controller.isLoginButtonPressed.value
+                                              ? 0.5
+                                              : 1,
+                                      child: const Text(
+                                        'Masuk',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                child: const Text(
-                                  'Masuk',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
+                                )),
                             const SizedBox(height: 8),
-                            SizedBox(
-                              width: width * 0.8,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  Get.offAllNamed(Routes.REGISTER);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                  elevation: 0,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    side: const BorderSide(
-                                        color: Colors.white, width: 1),
+                            Obx(() => SizedBox(
+                                  width: width * 0.8,
+                                  child: ElevatedButton(
+                                    onPressed:
+                                        controller.handleRegisterButtonPress,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 14),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        side: const BorderSide(
+                                            color: Colors.white, width: 1),
+                                      ),
+                                    ),
+                                    child: Opacity(
+                                      opacity: controller
+                                              .isRegisterButtonPressed.value
+                                          ? 0.5
+                                          : 1,
+                                      child: const Text(
+                                        'Daftar',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                child: const Text(
-                                  'Daftar',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
+                                )),
                           ],
                         ),
                       ),
@@ -162,7 +172,6 @@ class OnboardingView extends GetView<OnboardingController> {
                 );
               },
             ),
-
             Obx(() {
               if (controller.currentIndex.value != pages.length - 1) {
                 return Positioned(
@@ -176,7 +185,6 @@ class OnboardingView extends GetView<OnboardingController> {
                 return const SizedBox();
               }
             }),
-
             Obx(() {
               if (controller.currentIndex.value != pages.length - 1) {
                 return Positioned(
@@ -196,7 +204,6 @@ class OnboardingView extends GetView<OnboardingController> {
                 return const SizedBox();
               }
             }),
-
             Obx(() {
               if (controller.currentIndex.value != pages.length - 1) {
                 return Positioned(
@@ -214,8 +221,6 @@ class OnboardingView extends GetView<OnboardingController> {
                 return const SizedBox();
               }
             }),
-
-            // Skip this step dengan underline custom
             Obx(() {
               if (controller.currentIndex.value == pages.length - 1) {
                 return Positioned(
@@ -225,7 +230,7 @@ class OnboardingView extends GetView<OnboardingController> {
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed('/home');
+                        Get.toNamed(Routes.HOME);
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -238,7 +243,7 @@ class OnboardingView extends GetView<OnboardingController> {
                             ),
                           ),
                           Container(
-                            height: 1,
+                            height: 0.5,
                             width: 80,
                             color: Colors.white,
                           ),

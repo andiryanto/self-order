@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/login_controller.dart';
+import 'package:self_order/app/routes/app_pages.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({super.key});
@@ -10,9 +11,16 @@ class LoginView extends GetView<LoginController> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Get.offAllNamed(Routes.ONBOARDING); // Back ke onboarding
+          },
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
+        centerTitle: true,
         title: const Text(
           "Masuk",
           style: TextStyle(
@@ -21,7 +29,6 @@ class LoginView extends GetView<LoginController> {
             fontSize: 18,
           ),
         ),
-        centerTitle: true,
       ),
       body: SafeArea(
         minimum: const EdgeInsets.only(top: 24, left: 24, right: 24),
@@ -46,15 +53,18 @@ class LoginView extends GetView<LoginController> {
                 keyboardType: TextInputType.phone,
                 cursorColor: Colors.black,
                 decoration: InputDecoration(
-                  prefixIcon: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  prefixIcon: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 12.0),
                     child: Text('+62 '),
                   ),
                   prefixIconConstraints:
                       const BoxConstraints(minWidth: 0, minHeight: 0),
                   hintText: 'Nomor ponsel anda',
+                  hintStyle: TextStyle(
+                    color: Colors.grey.shade400,
+                  ),
                   border: const OutlineInputBorder(),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),
                   ),
                 ),
@@ -74,8 +84,11 @@ class LoginView extends GetView<LoginController> {
                     cursorColor: Colors.black,
                     decoration: InputDecoration(
                       hintText: 'Sandi anda',
+                      hintStyle: TextStyle(
+                        color: Colors.grey.shade400,
+                      ),
                       border: const OutlineInputBorder(),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
                       ),
                       suffixIcon: IconButton(
@@ -101,14 +114,15 @@ class LoginView extends GetView<LoginController> {
               const SizedBox(height: 32),
               OutlinedButton(
                 onPressed: () {
-                  controller.login(); // Panggil fungsi login dari controller
+                  controller.login();
                 },
                 style: OutlinedButton.styleFrom(
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(50),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(
+                        12), // Sama kayak style sebelumnya
                   ),
                 ),
                 child: const Text("Masuk"),
@@ -119,15 +133,23 @@ class LoginView extends GetView<LoginController> {
                   const Text("Belum Punya Akun?"),
                   GestureDetector(
                     onTap: () {
-                      // Nanti ke halaman register
+                      Get.toNamed(Routes.REGISTER);
                     },
-                    child: const Text(
-                      "Daftar Sekarang",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
-                        color: Colors.blue,
-                      ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Daftar Sekarang",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
+                        ),
+                        Container(
+                          height: 0.5,
+                          width: 80,
+                          color: Colors.blue,
+                        ),
+                      ],
                     ),
                   ),
                 ],

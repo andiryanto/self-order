@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:self_order/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+import 'package:self_order/app/routes/app_pages.dart';
 
 class OnboardingController extends GetxController {
   final RxInt currentIndex = 0.obs;
   final PageController pageController = PageController();
+
+  // 2 buah state animasi button
+  final isLoginButtonPressed = false.obs;
+  final isRegisterButtonPressed = false.obs;
 
   final List<Map<String, String>> onboardingPages = [
     {
@@ -35,12 +39,10 @@ class OnboardingController extends GetxController {
     },
   ];
 
-  // Update halaman ketika di-swipe
   void onPageChanged(int index) {
     currentIndex.value = index;
   }
 
-  // Pindah ke halaman selanjutnya
   void nextPage() {
     pageController.nextPage(
       duration: const Duration(milliseconds: 300),
@@ -48,14 +50,30 @@ class OnboardingController extends GetxController {
     );
   }
 
-  // Skip langsung ke login
   void skip() {
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       Get.offAllNamed(Routes.LOGIN);
     });
   }
 
-  // Jangan lupa dispose controllernya
+  // fungsi untuk animasi login button
+  Future<void> handleLoginButtonPress() async {
+    isLoginButtonPressed.value = true;
+    await Future.delayed(const Duration(milliseconds: 150));
+    isLoginButtonPressed.value = false;
+    await Future.delayed(const Duration(milliseconds: 100));
+    Get.offAllNamed(Routes.LOGIN);
+  }
+
+  // fungsi untuk animasi register button
+  Future<void> handleRegisterButtonPress() async {
+    isRegisterButtonPressed.value = true;
+    await Future.delayed(const Duration(milliseconds: 150));
+    isRegisterButtonPressed.value = false;
+    await Future.delayed(const Duration(milliseconds: 100));
+    Get.offAllNamed(Routes.REGISTER);
+  }
+
   @override
   void onClose() {
     pageController.dispose();
