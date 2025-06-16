@@ -1,23 +1,38 @@
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
+  var username = 'Ryan'.obs;
+  var queueNumber = 50.obs;
 
-  final count = 0.obs;
+  var feedbacks = <String>[
+    'Good service, kopinya enak!!!. Baristanya ganteng',
+    'Tempatnya nyaman bggttt, pokoknya debesttt'
+  ].obs;
+
+  // Simulasi ambil data dari backend (bisa kamu ubah ke API call)
   @override
   void onInit() {
     super.onInit();
+    fetchUserData();
+    fetchQueueNumber();
+    fetchFeedbacks();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void fetchUserData() {
+    // Simulasi: ambil dari backend / storage
+    username.value = 'Ryan';
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  void fetchQueueNumber() {
+    // Simulasi ambil dari server
+    queueNumber.value = 50;
   }
 
-  void increment() => count.value++;
+  void fetchFeedbacks() {
+    // Simulasi ambil dari server
+    feedbacks.value = [
+      'Good service, kopinya enak!!!. Baristanya ganteng',
+      'Tempatnya nyaman bggttt, pokoknya debesttt'
+    ];
+  }
 }
