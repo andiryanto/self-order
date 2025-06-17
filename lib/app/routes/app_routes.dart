@@ -10,10 +10,10 @@ abstract class Routes {
   static const REGISTER = _Paths.REGISTER;
 
   static const EVENT = _Paths.EVENT;
-  static const MENU = _Paths.MENU;
   static const SHOP = _Paths.SHOP;
   static const ABOUT = _Paths.ABOUT;
   static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
+  static const MYMENU = _Paths.MYMENU;
 }
 
 abstract class _Paths {
@@ -25,8 +25,8 @@ abstract class _Paths {
   static const REGISTER = '/register';
 
   static const EVENT = '/event';
-  static const MENU = '/menu';
   static const SHOP = '/shop';
   static const ABOUT = '/about';
   static const FORGOT_PASSWORD = '/forgot-password';
+  static const MYMENU = '/mymenu';
 }

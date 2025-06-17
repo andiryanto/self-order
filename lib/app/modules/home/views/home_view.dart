@@ -158,7 +158,10 @@ class HomeView extends GetView<HomeController> {
                 Text('Promo!',
                     style:
                         TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
-                Text('See All')
+                Text(
+                  'See All',
+                  style: TextStyle(color: Colors.grey),
+                )
               ],
             ),
             const SizedBox(height: 10),
@@ -201,7 +204,10 @@ class HomeView extends GetView<HomeController> {
                 Text('Feedback!',
                     style:
                         TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
-                Text('See All')
+                Text(
+                  'See All',
+                  style: TextStyle(color: Colors.grey),
+                )
               ],
             ),
             const SizedBox(height: 10),
@@ -236,6 +242,26 @@ class HomeView extends GetView<HomeController> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              // Tetap di Home
+              break;
+            case 1:
+              Get.offAllNamed('/event');
+              break;
+            case 2:
+              Get.offAllNamed('/menu');
+              break;
+            case 3:
+              Get.offAllNamed('/shop');
+              break;
+            case 4:
+              Get.offAllNamed('/about');
+              break;
+          }
+        },
         backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,

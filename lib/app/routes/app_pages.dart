@@ -10,8 +10,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
-import '../modules/menu/bindings/menu_binding.dart';
-import '../modules/menu/views/menu_view.dart';
+import '../modules/mymenu/bindings/mymenu_binding.dart';
+import '../modules/mymenu/views/mymenu_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/register/bindings/register_binding.dart';
@@ -70,18 +70,7 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(
-      name: _Paths.MENU,
-      page: () => const MenuView(),
-      binding: MenuBinding(),
-      children: [
-        GetPage(
-          name: _Paths.MENU,
-          page: () => const MenuView(),
-          binding: MenuBinding(),
-        ),
-      ],
-    ),
+
     GetPage(
       name: _Paths.SHOP,
       page: () => const ShopView(),
@@ -110,6 +99,11 @@ class AppPages {
       name: _Paths.FORGOT_PASSWORD,
       page: () => const ForgotPasswordView(),
       binding: ForgotPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.MYMENU,
+      page: () => const MyMenuView(),
+      binding: MymenuBinding(),
     ),
   ];
 }

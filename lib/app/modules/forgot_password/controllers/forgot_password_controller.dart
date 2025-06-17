@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../routes/app_pages.dart'; // Pastikan ini diimport agar bisa pakai Routes.LOGIN
+import '../../../routes/app_pages.dart';
 
 class ForgotPasswordController extends GetxController {
   var showOldPassword = false.obs;
@@ -36,8 +36,7 @@ class ForgotPasswordController extends GetxController {
 
     // Navigasi ke login setelah 2 detik
     Future.delayed(const Duration(seconds: 2), () {
-      Get.offAllNamed(
-          Routes.LOGIN); // ganti dengan '/login' kalau pakai string langsung
+      Get.offAllNamed(Routes.LOGIN);
     });
   }
 
