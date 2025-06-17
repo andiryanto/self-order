@@ -114,8 +114,8 @@ class AboutView extends GetView<AboutController> {
 
   Widget crewCard(String name, String role, String gender) {
     String imagePath = gender == 'female'
-        ? 'assets/images/woman.png'
-        : 'assets/images/man.png';
+        ? 'assets/images/woman.jpg'
+        : 'assets/images/man.jpg';
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
