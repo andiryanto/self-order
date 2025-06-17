@@ -56,7 +56,7 @@ class AboutView extends GetView<AboutController> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
-                  'assets/images/map.png', // ganti dengan map placeholder
+                  'assets/images/map.png',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -68,7 +68,7 @@ class AboutView extends GetView<AboutController> {
             crewCard('Chaeru Syam', 'Owner'),
             crewCard('Rofi Akbar', 'Staff'),
             crewCard('Adli Khoirullah', 'Staff'),
-            crewCard('Rahayu', 'Staff'),
+            crewCard('Rahayu', 'Staff', isFemale: true),
           ],
         ),
       ),
@@ -107,7 +107,7 @@ class AboutView extends GetView<AboutController> {
     );
   }
 
-  Widget crewCard(String name, String role) {
+  Widget crewCard(String name, String role, {bool isFemale = false}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(12),
@@ -118,8 +118,10 @@ class AboutView extends GetView<AboutController> {
       ),
       child: Row(
         children: [
-          const CircleAvatar(
-            backgroundImage: AssetImage('assets/images/crew_placeholder.png'),
+          CircleAvatar(
+            backgroundImage: AssetImage(
+              isFemale ? 'assets/images/woman.png' : 'assets/images/man.png',
+            ),
             radius: 30,
           ),
           const SizedBox(width: 12),
@@ -130,7 +132,7 @@ class AboutView extends GetView<AboutController> {
                 Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
                 Text(role),
                 const SizedBox(height: 4),
-                FaIcon(FontAwesomeIcons.instagram, color: Colors.pink)
+                const FaIcon(FontAwesomeIcons.instagram, color: Colors.pink),
               ],
             ),
           ),
