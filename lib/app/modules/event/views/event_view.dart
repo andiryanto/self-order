@@ -47,7 +47,7 @@ class EventView extends GetView<EventController> {
                   child: TextField(
                     cursorColor: Colors.black,
                     decoration: InputDecoration(
-                      hintText: 'cari event',
+                      hintText: 'Search Event',
                       hintStyle: TextStyle(color: Colors.grey),
                       prefixIcon: const Icon(Icons.search),
                       contentPadding: const EdgeInsets.symmetric(
@@ -151,7 +151,7 @@ class EventView extends GetView<EventController> {
               // Tetap di Event
               break;
             case 2:
-              Get.offAllNamed('/menu');
+              Get.offAllNamed('/mymenu');
               break;
             case 3:
               Get.offAllNamed('/shop');

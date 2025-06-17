@@ -1,23 +1,12 @@
 import 'package:get/get.dart';
 
 class AboutController extends GetxController {
-  //TODO: Implement AboutController
+  var username = 'Ryan'.obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    // Jika mau ambil dari storage/API:
+    // username.value = await getUserFromStorage();
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

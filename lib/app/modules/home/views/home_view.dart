@@ -252,7 +252,7 @@ class HomeView extends GetView<HomeController> {
               Get.offAllNamed('/event');
               break;
             case 2:
-              Get.offAllNamed('/menu');
+              Get.offAllNamed('/mymenu');
               break;
             case 3:
               Get.offAllNamed('/shop');

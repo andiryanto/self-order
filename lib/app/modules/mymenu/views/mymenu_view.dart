@@ -41,39 +41,133 @@ class MyMenuView extends GetView<MymenuController> {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Search product',
+                      hintText: 'Search Product',
+                      hintStyle: TextStyle(color: Colors.grey),
                       prefixIcon: const Icon(Icons.search),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 0, horizontal: 16),
                       border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.black),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.black),
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
-                IconButton(
+                OutlinedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.filter_list),
+                  label: const Text('Filter'),
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    side: const BorderSide(color: Colors.black),
+                    foregroundColor: Colors.black,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
             Wrap(
               spacing: 8,
-              children: const [
+              children: [
+                // Recommended: Icon 👍
                 FilterChip(
-                    label: Text("Coffee"), selected: true, onSelected: null),
+                  label:
+                      const Icon(Icons.thumb_up, size: 16, color: Colors.black),
+                  selected: true,
+                  onSelected: (_) {},
+                  selectedColor: Colors.white,
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(color: Colors.black),
+                  ),
+                  showCheckmark: false,
+                ),
+
+                // Coffee
                 FilterChip(
-                    label: Text("Non Coffee"),
-                    selected: false,
-                    onSelected: null),
+                  label: const Text("Coffee",
+                      style: TextStyle(color: Colors.black)),
+                  selected: false,
+                  onSelected: (_) {},
+                  backgroundColor: Colors.white,
+                  selectedColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(color: Colors.black),
+                  ),
+                  showCheckmark: false,
+                ),
+
+                // Non Coffee
                 FilterChip(
-                    label: Text("Manual Brew"),
-                    selected: false,
-                    onSelected: null),
+                  label: const Text("Non Coffee",
+                      style: TextStyle(color: Colors.black)),
+                  selected: false,
+                  onSelected: (_) {},
+                  backgroundColor: Colors.white,
+                  selectedColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(color: Colors.black),
+                  ),
+                  showCheckmark: false,
+                ),
+
+                // Manual Brew
+                FilterChip(
+                  label: const Text("Manual Brew",
+                      style: TextStyle(color: Colors.black)),
+                  selected: false,
+                  onSelected: (_) {},
+                  backgroundColor: Colors.white,
+                  selectedColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: const BorderSide(color: Colors.black),
+                  ),
+                  showCheckmark: false,
+                ),
               ],
             ),
             const SizedBox(height: 24),
-            sectionHeader('Recommended', 'Takeaway'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Recommended",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                DropdownButton<String>(
+                  value: controller.selectedOrderType.value,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  underline: const SizedBox(),
+                  style: const TextStyle(color: Colors.black),
+                  items: const [
+                    DropdownMenuItem(
+                      value: "Takeaway",
+                      child: Text("Takeaway"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Dine In",
+                      child: Text("Dine In"),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    controller.selectedOrderType.value = value!;
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
             productCard('Kopi Susu Aren', 'Espresso dan susu dengan gula aren',
                 'assets/images/coffee.png', 'Rp 23.000'),
             const SizedBox(height: 24),
