@@ -12,24 +12,16 @@ class LoginController extends GetxController {
   }
 
   void login() {
-    // Nanti logika login aslinya di sini
     String phone = phoneController.text;
     String password = passwordController.text;
 
     if (phone.isNotEmpty && password.isNotEmpty) {
       Get.snackbar("Sukses", "Login berhasil!",
           backgroundColor: Colors.green, colorText: Colors.white);
-      Get.offAllNamed('/home'); // misalnya ke halaman home
+      Get.offAllNamed('/home');
     } else {
-      Get.snackbar("Error", "Mohon isi semua field",
+      Get.snackbar("Error", "Mohon lengkapi semua data",
           backgroundColor: Colors.red, colorText: Colors.white);
     }
-  }
-
-  @override
-  void onClose() {
-    phoneController.dispose();
-    passwordController.dispose();
-    super.onClose();
   }
 }

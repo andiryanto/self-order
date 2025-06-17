@@ -4,15 +4,30 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
-  Widget promoCard(String assetPath) {
+
+  Widget promoCard(String imagePath) {
     return Container(
-      width: 150,
       margin: const EdgeInsets.only(right: 10),
+      width: 80,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        image: DecorationImage(
-          image: AssetImage(assetPath),
-          fit: BoxFit.cover,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
@@ -21,7 +36,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Ratakan warna background
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
@@ -140,29 +155,34 @@ class HomeView extends GetView<HomeController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                Text('Promo!', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('Promo!',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
                 Text('See All')
               ],
             ),
             const SizedBox(height: 10),
             SizedBox(
               height: 150,
-              child: ListView(scrollDirection: Axis.horizontal, children: [
-                promoCard('assets/images/promo1.jpg'),
-                promoCard('assets/images/promo2.jpg'),
-                promoCard('assets/images/promo3.jpg'),
-                promoCard('assets/images/promo4.jpg'),
-              ]),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  promoCard('assets/images/Promo1.jpg'),
+                  promoCard('assets/images/Promo2.jpg'),
+                  promoCard('assets/images/Promo3.jpg'),
+                  promoCard('assets/images/Promo4.jpg'),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
             const Text('Antrian!',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
             const SizedBox(height: 10),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(30),
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Obx(() => Column(
@@ -170,7 +190,7 @@ class HomeView extends GetView<HomeController> {
                       const Text('Nomor antrian saat ini:'),
                       Text('${controller.queueNumber.value}',
                           style: const TextStyle(
-                              fontSize: 32, fontWeight: FontWeight.bold)),
+                              fontSize: 60, fontWeight: FontWeight.bold)),
                     ],
                   )),
             ),
@@ -178,8 +198,9 @@ class HomeView extends GetView<HomeController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                Text('FEEDBACK!',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('Feedback!',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
                 Text('See All')
               ],
             ),
@@ -197,15 +218,25 @@ class HomeView extends GetView<HomeController> {
                               BoxShadow(color: Colors.black12, blurRadius: 4)
                             ],
                           ),
-                          child: Text(feedback),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              feedback,
+                              style: const TextStyle(fontSize: 14),
+                              textAlign: TextAlign.left,
+                              softWrap: true,
+                              overflow: TextOverflow.visible,
+                            ),
+                          ),
                         ),
                       )
                       .toList(),
-                ))
+                )),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
         items: const [

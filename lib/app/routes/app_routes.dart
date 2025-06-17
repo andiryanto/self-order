@@ -13,6 +13,7 @@ abstract class Routes {
   static const MENU = _Paths.MENU;
   static const SHOP = _Paths.SHOP;
   static const ABOUT = _Paths.ABOUT;
+  static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
 }
 
 abstract class _Paths {
@@ -27,4 +28,5 @@ abstract class _Paths {
   static const MENU = '/menu';
   static const SHOP = '/shop';
   static const ABOUT = '/about';
+  static const FORGOT_PASSWORD = '/forgot-password';
 }

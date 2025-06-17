@@ -95,16 +95,14 @@ class LoginView extends GetView<LoginController> {
                         icon: Icon(controller.obscurePassword.value
                             ? Icons.visibility_off
                             : Icons.visibility),
-                        onPressed: () {
-                          controller.togglePasswordVisibility();
-                        },
+                        onPressed: controller.togglePasswordVisibility,
                       ),
                     ),
                   )),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
                   child: const Text(
                     "Lupa sandi?",
                     style: TextStyle(color: Colors.black),
@@ -113,47 +111,48 @@ class LoginView extends GetView<LoginController> {
               ),
               const SizedBox(height: 32),
               OutlinedButton(
-                onPressed: () {
-                  controller.login();
-                },
+                onPressed: controller.login,
                 style: OutlinedButton.styleFrom(
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   minimumSize: const Size.fromHeight(50),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        12), // Sama kayak style sebelumnya
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: const Text("Masuk"),
               ),
               const SizedBox(height: 35),
-              Column(
-                children: [
-                  const Text("Belum Punya Akun?"),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.REGISTER);
-                    },
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Daftar Sekarang",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
+              Center(
+                child: Column(
+                  children: [
+                    const Text("Belum Punya Akun?"),
+                    const SizedBox(height: 4),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.REGISTER);
+                      },
+                      child: Column(
+                        children: [
+                          const Text(
+                            "Daftar Sekarang",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Container(
+                            height: 0.5,
+                            width: 80,
                             color: Colors.blue,
                           ),
-                        ),
-                        Container(
-                          height: 0.5,
-                          width: 80,
-                          color: Colors.blue,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(height: 24),
             ],
           ),
         ),
