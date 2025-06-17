@@ -8,10 +8,10 @@ class AboutView extends GetView<AboutController> {
   const AboutView({super.key});
 
   void _openMap() async {
-    final Uri url = Uri.parse(
-        'https://www.google.com/maps/place/Pranayama+Social+Area/@-6.1737807,106.6372833,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69f95ff0afcf41:0x6b2eb96d978be029!8m2!3d-6.1737807!4d106.6372833!16s%2Fg%2F11t_rm7y2y?entry=ttu&g_ep=EgoyMDI1MDYxMS4wIKXMDSoASAFQAw%3D%3D');
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+    const url =
+        'https://www.google.com/maps/place/Pranayama+Social+Area/@-6.1737807,106.6372833,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69f95ff0afcf41:0x6b2eb96d978be029!8m2!3d-6.1737807!4d106.6372833!16s%2Fg%2F11t_rm7y2y?entry=ttu';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       Get.snackbar('Error', 'Tidak dapat membuka peta');
     }
@@ -48,27 +48,32 @@ class AboutView extends GetView<AboutController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Section: STORE LOCATION
+            Container(height: 8, color: Colors.grey[300]),
+            const SizedBox(height: 12),
             const Text('STORE LOCATION',
                 style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
+            const SizedBox(height: 28),
             GestureDetector(
               onTap: _openMap,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
                   'assets/images/map.png',
+                  width: double.infinity,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+
+            const SizedBox(height: 30),
             const Text('OUR CREW',
                 style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 12),
-            crewCard('Chaeru Syam', 'Owner'),
-            crewCard('Rofi Akbar', 'Staff'),
-            crewCard('Adli Khoirullah', 'Staff'),
-            crewCard('Rahayu', 'Staff', isFemale: true),
+            const SizedBox(height: 20),
+            crewCard('Chaeru Syam', 'Owner', 'male'),
+            crewCard('Rofi Akbar', 'Staff', 'male'),
+            crewCard('Adli Khoirullah', 'Staff', 'male'),
+            crewCard('Rahayu', 'Staff', 'female'),
           ],
         ),
       ),
@@ -107,7 +112,11 @@ class AboutView extends GetView<AboutController> {
     );
   }
 
-  Widget crewCard(String name, String role, {bool isFemale = false}) {
+  Widget crewCard(String name, String role, String gender) {
+    String imagePath = gender == 'female'
+        ? 'assets/images/woman.png'
+        : 'assets/images/man.png';
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6),
       padding: const EdgeInsets.all(12),
@@ -119,9 +128,7 @@ class AboutView extends GetView<AboutController> {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: AssetImage(
-              isFemale ? 'assets/images/woman.png' : 'assets/images/man.png',
-            ),
+            backgroundImage: AssetImage(imagePath),
             radius: 30,
           ),
           const SizedBox(width: 12),
