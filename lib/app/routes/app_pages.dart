@@ -12,6 +12,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/mymenu/bindings/mymenu_binding.dart';
 import '../modules/mymenu/views/mymenu_view.dart';
+import '../modules/notifics/bindings/notifics_binding.dart';
+import '../modules/notifics/views/notifics_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/register/bindings/register_binding.dart';
@@ -104,6 +106,11 @@ class AppPages {
       name: _Paths.MYMENU,
       page: () => const MyMenuView(),
       binding: MymenuBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICS,
+      page: () => const NotificsView(),
+      binding: NotificsBinding(),
     ),
   ];
 }
