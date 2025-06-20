@@ -1,3 +1,4 @@
+// event_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/event_controller.dart';
@@ -35,9 +36,12 @@ class EventView extends GetView<EventController> {
                 onPressed: () => Get.toNamed('/notifics'),
               ),
               const SizedBox(width: 10),
-              CircleAvatar(
-                backgroundColor: Colors.grey[300],
-                child: const Icon(Icons.person, color: Colors.black),
+              GestureDetector(
+                onTap: () => Get.toNamed("/account"),
+                child: CircleAvatar(
+                  backgroundColor: Colors.grey[300],
+                  child: const Icon(Icons.person, color: Colors.black),
+                ),
               ),
               const SizedBox(width: 10),
             ],
@@ -52,9 +56,11 @@ class EventView extends GetView<EventController> {
                     Expanded(
                       child: TextField(
                         cursorColor: Colors.black,
+                        onChanged: (value) =>
+                            controller.searchQuery.value = value,
                         decoration: InputDecoration(
                           hintText: 'Search Event',
-                          hintStyle: TextStyle(color: Colors.grey),
+                          hintStyle: const TextStyle(color: Colors.grey),
                           prefixIcon: const Icon(Icons.search),
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 0, horizontal: 16),
@@ -66,7 +72,76 @@ class EventView extends GetView<EventController> {
                     ),
                     const SizedBox(width: 8),
                     OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.bottomSheet(
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20)),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  'Filter',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 12),
+                                Wrap(
+                                  spacing: 8,
+                                  children: [
+                                    'Semua',
+                                    'Musik',
+                                    'Pameran',
+                                    'Workshop',
+                                    'Lainnya',
+                                  ].map((category) {
+                                    final isSelected = controller
+                                                .selectedCategory.value ==
+                                            category ||
+                                        (category == 'Semua' &&
+                                            controller.selectedCategory.value ==
+                                                '');
+                                    return ChoiceChip(
+                                      label: Text(
+                                        category,
+                                        style: TextStyle(
+                                          color: isSelected
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                      selected: isSelected,
+                                      selectedColor: Colors.black,
+                                      backgroundColor: Colors.white,
+                                      checkmarkColor: isSelected
+                                          ? Colors.white
+                                          : Colors.black,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        side: BorderSide(
+                                          color: isSelected
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
+                                      onSelected: (selected) {
+                                        controller.selectedCategory.value =
+                                            category == 'Semua' ? '' : category;
+                                        Get.back();
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                       icon: const Icon(Icons.filter_list),
                       label: const Text('Filter'),
                       style: OutlinedButton.styleFrom(
@@ -87,9 +162,9 @@ class EventView extends GetView<EventController> {
                 const SizedBox(height: 16),
                 Expanded(
                   child: Obx(() => ListView.builder(
-                        itemCount: controller.events.length,
+                        itemCount: controller.filteredEvents.length,
                         itemBuilder: (context, index) {
-                          final event = controller.events[index];
+                          final event = controller.filteredEvents[index];
                           return Container(
                             margin: const EdgeInsets.only(bottom: 16),
                             decoration: BoxDecoration(
@@ -129,9 +204,9 @@ class EventView extends GetView<EventController> {
                                             color: Colors.black87),
                                       ),
                                       const SizedBox(height: 4),
-                                      const Text(
-                                        'Live Music at Pranayama',
-                                        style: TextStyle(
+                                      Text(
+                                        'Kategori: ${event.category}',
+                                        style: const TextStyle(
                                             fontStyle: FontStyle.italic,
                                             color: Colors.black54),
                                       )
@@ -147,40 +222,6 @@ class EventView extends GetView<EventController> {
               ],
             ),
           ),
-          // bottomNavigationBar: BottomNavigationBar(
-          //   currentIndex: 1,
-          //   onTap: (index) {
-          //     switch (index) {
-          //       case 0:
-          //         Get.offAllNamed('/home');
-          //         break;
-          //       case 1:
-          //         // Tetap di Event
-          //         break;
-          //       case 2:
-          //         Get.offAllNamed('/mymenu');
-          //         break;
-          //       case 3:
-          //         Get.offAllNamed('/shop');
-          //         break;
-          //       case 4:
-          //         Get.offAllNamed('/about');
-          //         break;
-          //     }
-          //   },
-          //   backgroundColor: Colors.white,
-          //   selectedItemColor: Colors.black,
-          //   unselectedItemColor: Colors.grey,
-          //   items: const [
-          //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          //     BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.menu_book), label: 'Menu'),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.shopping_bag), label: 'Shop'),
-          //     BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
-          //   ],
-          // ),
         );
       },
     );

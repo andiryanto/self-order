@@ -230,7 +230,7 @@ class OnboardingView extends GetView<OnboardingController> {
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.HOME);
+                        Get.toNamed(Routes.HOME_MAIN);
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,

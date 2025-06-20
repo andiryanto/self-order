@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
+import 'package:self_order/app/modules/home_main/controllers/home_main_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -11,7 +12,7 @@ class HomeView extends GetView<HomeController> {
       width: 80,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 4,
@@ -58,9 +59,12 @@ class HomeView extends GetView<HomeController> {
                 onPressed: () => Get.toNamed('/notifics'),
               ),
               const SizedBox(width: 10),
-              CircleAvatar(
-                backgroundColor: Colors.grey[300],
-                child: const Icon(Icons.person, color: Colors.black),
+              GestureDetector(
+                onTap: () => Get.toNamed("/account"),
+                child: CircleAvatar(
+                  backgroundColor: Colors.grey[300],
+                  child: const Icon(Icons.person, color: Colors.black),
+                ),
               ),
               const SizedBox(width: 10),
             ],
@@ -80,8 +84,11 @@ class HomeView extends GetView<HomeController> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           side: const BorderSide(color: Colors.grey),
+                          overlayColor: Colors.black26,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.find<HomeMainController>().changeIndex(2);
+                        },
                         child: Container(
                           height: 120,
                           padding: const EdgeInsets.all(12),
@@ -122,8 +129,11 @@ class HomeView extends GetView<HomeController> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           side: const BorderSide(color: Colors.grey),
+                          overlayColor: Colors.black26,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.find<HomeMainController>().changeIndex(2);
+                        },
                         child: Container(
                           height: 120,
                           padding: const EdgeInsets.all(12),
@@ -194,6 +204,9 @@ class HomeView extends GetView<HomeController> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black12, blurRadius: 4),
+                    ],
                   ),
                   child: Obx(() => Column(
                         children: [
@@ -227,7 +240,7 @@ class HomeView extends GetView<HomeController> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                       color: Colors.black12, blurRadius: 4)
                                 ],
@@ -238,8 +251,6 @@ class HomeView extends GetView<HomeController> {
                                   feedback,
                                   style: const TextStyle(fontSize: 14),
                                   textAlign: TextAlign.left,
-                                  softWrap: true,
-                                  overflow: TextOverflow.visible,
                                 ),
                               ),
                             ),
@@ -249,40 +260,6 @@ class HomeView extends GetView<HomeController> {
               ],
             ),
           ),
-          // bottomNavigationBar: BottomNavigationBar(
-          //   currentIndex: 0,
-          //   onTap: (index) {
-          //     switch (index) {
-          //       case 0:
-          //         // Tetap di Home
-          //         break;
-          //       case 1:
-          //         Get.offAllNamed('/event');
-          //         break;
-          //       case 2:
-          //         Get.offAllNamed('/mymenu');
-          //         break;
-          //       case 3:
-          //         Get.offAllNamed('/shop');
-          //         break;
-          //       case 4:
-          //         Get.offAllNamed('/about');
-          //         break;
-          //     }
-          //   },
-          //   backgroundColor: Colors.white,
-          //   selectedItemColor: Colors.black,
-          //   unselectedItemColor: Colors.grey,
-          //   items: const [
-          //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          //     BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.menu_book), label: 'Menu'),
-          //     BottomNavigationBarItem(
-          //         icon: Icon(Icons.shopping_bag), label: 'Shop'),
-          //     BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
-          //   ],
-          // ),
         );
       },
     );

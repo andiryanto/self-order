@@ -1,23 +1,13 @@
 import 'package:get/get.dart';
 
 class AccountController extends GetxController {
-  //TODO: Implement AccountController
+  var userName = 'Rian'.obs;
+  var userPhone = '0882 - 1037 - 6547'.obs;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  void logout() {
+    // Di sini bisa tambahkan proses logout beneran, seperti hapus token dll.
+    userName.value = '';
+    userPhone.value = '';
+    Get.offAllNamed('/login'); // atau sesuai route login kamu
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

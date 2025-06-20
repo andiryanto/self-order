@@ -42,9 +42,12 @@ class AboutView extends GetView<AboutController> {
                 onPressed: () => Get.toNamed('/notifics'),
               ),
               const SizedBox(width: 10),
-              CircleAvatar(
-                backgroundColor: Colors.grey[300],
-                child: const Icon(Icons.person, color: Colors.black),
+              GestureDetector(
+                onTap: () => Get.toNamed("/account"),
+                child: CircleAvatar(
+                  backgroundColor: Colors.grey[300],
+                  child: const Icon(Icons.person, color: Colors.black),
+                ),
               ),
               const SizedBox(width: 10),
             ],
@@ -55,7 +58,7 @@ class AboutView extends GetView<AboutController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Section: STORE LOCATION
-                Container(height: 8, color: Colors.black),
+                const Divider(thickness: 2, color: Colors.black),
                 const SizedBox(height: 20),
                 const Text('Store Location!',
                     style:

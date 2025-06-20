@@ -9,10 +9,6 @@ class ShopView extends GetView<ShopController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.offAllNamed('/home'),
-        ),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
