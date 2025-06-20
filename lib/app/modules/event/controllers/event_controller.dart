@@ -9,7 +9,7 @@ class EventModel {
 }
 
 class EventController extends GetxController {
-  var userName = 'Ryan'.obs;
+  var username = 'Ryan'.obs;
 
   var events = <EventModel>[
     EventModel(

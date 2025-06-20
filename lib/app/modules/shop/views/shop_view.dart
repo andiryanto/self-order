@@ -19,15 +19,13 @@ class ShopView extends GetView<ShopController> {
         title: const Text(
           'Shop',
           style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
         ),
       ),
       backgroundColor: Colors.white,
       body: const Center(
         child: Text(
-          'Shop Page',
+          'Empty',
           style: TextStyle(fontSize: 18, color: Colors.grey),
         ),
       ),

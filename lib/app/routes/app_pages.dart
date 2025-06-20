@@ -2,12 +2,16 @@ import 'package:get/get.dart';
 
 import '../modules/about/bindings/about_binding.dart';
 import '../modules/about/views/about_view.dart';
+import '../modules/account/bindings/account_binding.dart';
+import '../modules/account/views/account_view.dart';
 import '../modules/event/bindings/event_binding.dart';
 import '../modules/event/views/event_view.dart';
 import '../modules/forgot_password/bindings/forgot_password_binding.dart';
 import '../modules/forgot_password/views/forgot_password_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/home_main/bindings/home_main_binding.dart';
+import '../modules/home_main/views/home_main_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/mymenu/bindings/mymenu_binding.dart';
@@ -111,6 +115,16 @@ class AppPages {
       name: _Paths.NOTIFICS,
       page: () => const NotificsView(),
       binding: NotificsBinding(),
+    ),
+    GetPage(
+      name: _Paths.HOME_MAIN,
+      page: () => const HomeMainView(),
+      binding: HomeMainBinding(),
+    ),
+    GetPage(
+      name: _Paths.ACCOUNT,
+      page: () => const AccountView(),
+      binding: AccountBinding(),
     ),
   ];
 }

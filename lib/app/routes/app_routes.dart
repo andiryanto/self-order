@@ -15,6 +15,8 @@ abstract class Routes {
   static const FORGOT_PASSWORD = _Paths.FORGOT_PASSWORD;
   static const MYMENU = _Paths.MYMENU;
   static const NOTIFICS = _Paths.NOTIFICS;
+  static const HOME_MAIN = _Paths.HOME_MAIN;
+  static const ACCOUNT = _Paths.ACCOUNT;
 }
 
 abstract class _Paths {
@@ -31,4 +33,6 @@ abstract class _Paths {
   static const FORGOT_PASSWORD = '/forgot-password';
   static const MYMENU = '/mymenu';
   static const NOTIFICS = '/notifics';
+  static const HOME_MAIN = '/home-main';
+  static const ACCOUNT = '/account';
 }

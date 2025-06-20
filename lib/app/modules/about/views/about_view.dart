@@ -19,96 +19,73 @@ class AboutView extends GetView<AboutController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Obx(() => Text(
-              'Halo, ${controller.username.value}',
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+    return GetBuilder<AboutController>(
+      init: AboutController(),
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: Obx(() => Text(
+                  'Halo, ${controller.username.value}',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                )),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.notifications_none, color: Colors.black),
+                onPressed: () => Get.toNamed('/notifics'),
               ),
-            )),
-        actions: [
-          const Icon(Icons.notifications_none, color: Colors.black),
-          const SizedBox(width: 10),
-          CircleAvatar(
-            backgroundColor: Colors.grey[300],
-            child: const Icon(Icons.person, color: Colors.black),
+              const SizedBox(width: 10),
+              CircleAvatar(
+                backgroundColor: Colors.grey[300],
+                child: const Icon(Icons.person, color: Colors.black),
+              ),
+              const SizedBox(width: 10),
+            ],
           ),
-          const SizedBox(width: 10),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Section: STORE LOCATION
-            Container(height: 8, color: Colors.grey[300]),
-            const SizedBox(height: 12),
-            const Text('STORE LOCATION',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 28),
-            GestureDetector(
-              onTap: _openMap,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  'assets/images/map.png',
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Section: STORE LOCATION
+                Container(height: 8, color: Colors.black),
+                const SizedBox(height: 20),
+                const Text('Store Location!',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                const SizedBox(height: 28),
+                GestureDetector(
+                  onTap: _openMap,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      'assets/images/map.png',
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 30),
+                const Text('Our Crew!',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                const SizedBox(height: 20),
+                crewCard('Chaeru Syam', 'Owner', 'male'),
+                crewCard('Rofi Akbar', 'Staff', 'male'),
+                crewCard('Adli Khoirullah', 'Staff', 'male'),
+                crewCard('Rahayu', 'Staff', 'female'),
+              ],
             ),
-
-            const SizedBox(height: 30),
-            const Text('OUR CREW',
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            crewCard('Chaeru Syam', 'Owner', 'male'),
-            crewCard('Rofi Akbar', 'Staff', 'male'),
-            crewCard('Adli Khoirullah', 'Staff', 'male'),
-            crewCard('Rahayu', 'Staff', 'female'),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 4,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Get.offAllNamed('/home');
-              break;
-            case 1:
-              Get.offAllNamed('/event');
-              break;
-            case 2:
-              Get.offAllNamed('/menu');
-              break;
-            case 3:
-              Get.offAllNamed('/shop');
-              break;
-            case 4:
-              break;
-          }
-        },
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'Menu'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_bag), label: 'Shop'),
-          BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 
