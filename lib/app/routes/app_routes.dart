@@ -17,6 +17,7 @@ abstract class Routes {
   static const NOTIFICS = _Paths.NOTIFICS;
   static const HOME_MAIN = _Paths.HOME_MAIN;
   static const ACCOUNT = _Paths.ACCOUNT;
+  static const ALL_FEEDBACK = _Paths.ALL_FEEDBACK;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const NOTIFICS = '/notifics';
   static const HOME_MAIN = '/home-main';
   static const ACCOUNT = '/account';
+  static const ALL_FEEDBACK = '/all-feedback';
 }

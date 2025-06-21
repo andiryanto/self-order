@@ -7,24 +7,31 @@ class ShopView extends GetView<ShopController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'Shop',
-          style: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: const Center(
-        child: Text(
-          'Empty',
-          style: TextStyle(fontSize: 18, color: Colors.grey),
-        ),
-      ),
-    );
+    return GetBuilder<ShopController>(
+        init: ShopController(),
+        builder: (controller) {
+          return Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              centerTitle: true,
+              title: const Text(
+                'Shop',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
+              ),
+            ),
+            backgroundColor: Colors.white,
+            body: const Center(
+              child: Text(
+                'Empty',
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            ),
+          );
+        });
   }
 }

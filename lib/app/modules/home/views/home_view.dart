@@ -174,10 +174,6 @@ class HomeView extends GetView<HomeController> {
                     Text('Promo!',
                         style: TextStyle(
                             fontWeight: FontWeight.w600, fontSize: 18)),
-                    Text(
-                      'See All',
-                      style: TextStyle(color: Colors.grey),
-                    )
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -190,6 +186,7 @@ class HomeView extends GetView<HomeController> {
                       promoCard('assets/images/Promo2.jpg'),
                       promoCard('assets/images/Promo3.jpg'),
                       promoCard('assets/images/Promo4.jpg'),
+                      promoCard('assets/images/Promo5.jpg'),
                     ],
                   ),
                 ),
@@ -220,14 +217,23 @@ class HomeView extends GetView<HomeController> {
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text('Feedback!',
+                  children: [
+                    const Text(
+                      'Feedback!',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed('/all-feedback');
+                      },
+                      child: const Text(
+                        'See All',
                         style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 18)),
-                    Text(
-                      'See All',
-                      style: TextStyle(color: Colors.grey),
-                    )
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),

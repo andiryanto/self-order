@@ -4,6 +4,8 @@ import '../modules/about/bindings/about_binding.dart';
 import '../modules/about/views/about_view.dart';
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
+import '../modules/all_feedback/bindings/all_feedback_binding.dart';
+import '../modules/all_feedback/views/all_feedback_view.dart';
 import '../modules/event/bindings/event_binding.dart';
 import '../modules/event/views/event_view.dart';
 import '../modules/forgot_password/bindings/forgot_password_binding.dart';
@@ -125,6 +127,11 @@ class AppPages {
       name: _Paths.ACCOUNT,
       page: () => const AccountView(),
       binding: AccountBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALL_FEEDBACK,
+      page: () => const AllFeedbackView(),
+      binding: AllFeedbackBinding(),
     ),
   ];
 }
