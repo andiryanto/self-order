@@ -52,7 +52,7 @@ class OnboardingController extends GetxController {
 
   void skip() {
     Future.delayed(const Duration(milliseconds: 300), () {
-      Get.offAllNamed(Routes.HOME);
+      Get.offAllNamed(Routes.HOME_MAIN);
     });
   }
 
