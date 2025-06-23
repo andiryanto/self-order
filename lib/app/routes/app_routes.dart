@@ -18,6 +18,10 @@ abstract class Routes {
   static const HOME_MAIN = _Paths.HOME_MAIN;
   static const ACCOUNT = _Paths.ACCOUNT;
   static const ALL_FEEDBACK = _Paths.ALL_FEEDBACK;
+  static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
+  static const HELP_CENTER = _Paths.HELP_CENTER;
+  static const TERMS = _Paths.TERMS;
+  static const PRIVACY_POLICY = _Paths.PRIVACY_POLICY;
 }
 
 abstract class _Paths {
@@ -37,4 +41,8 @@ abstract class _Paths {
   static const HOME_MAIN = '/home-main';
   static const ACCOUNT = '/account';
   static const ALL_FEEDBACK = '/all-feedback';
+  static const RESET_PASSWORD = '/reset-password';
+  static const HELP_CENTER = '/help-center';
+  static const TERMS = '/terms';
+  static const PRIVACY_POLICY = '/privacy-policy';
 }

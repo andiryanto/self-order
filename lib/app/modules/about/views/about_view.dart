@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
+// import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../controllers/about_controller.dart';
 
 class AboutView extends GetView<AboutController> {
   const AboutView({super.key});
-
-  void _openMap() async {
-    const url =
-        'https://www.google.com/maps/place/Pranayama+Social+Area/@-6.1737807,106.6372833,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69f95ff0afcf41:0x6b2eb96d978be029!8m2!3d-6.1737807!4d106.6372833!16s%2Fg%2F11t_rm7y2y?entry=ttu';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      Get.snackbar('Error', 'Tidak dapat membuka peta');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +55,7 @@ class AboutView extends GetView<AboutController> {
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 const SizedBox(height: 28),
                 GestureDetector(
-                  onTap: _openMap,
+                  onTap: () => controller.openMap(),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.asset(

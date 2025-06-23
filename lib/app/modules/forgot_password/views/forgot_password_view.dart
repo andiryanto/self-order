@@ -7,125 +7,59 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
 
   @override
   Widget build(BuildContext context) {
-    final blackOutline = OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.black),
-    );
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text(
-          'Ubah Sandi',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
+        title: const Text('Lupa Sandi?',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-        centerTitle: true,
+        leading: BackButton(color: Colors.black),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Sandi Lama
-            const Text("Sandi Lama*",
-                style: TextStyle(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 5),
-            Obx(() => TextField(
-                  cursorColor: Colors.black,
-                  obscureText: !controller.showOldPassword.value,
-                  controller: controller.oldPasswordController,
-                  decoration: InputDecoration(
-                    hintText: "Sandi Lama Anda",
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                    ),
-                    enabledBorder: blackOutline,
-                    focusedBorder: blackOutline,
-                    border: blackOutline,
-                    suffixIcon: IconButton(
-                      icon: Icon(controller.showOldPassword.value
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () => controller.toggleOldPassword(),
-                    ),
+            const SizedBox(height: 16),
+            const Text(
+              'Kami akan mengirimkan tautan untuk mereset kata sandi Anda ke email Anda.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 24),
+            TextField(
+                cursorColor: Colors.black,
+                controller: controller.emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  hintText: 'Alamat Email Anda',
+                  hintStyle: TextStyle(color: Colors.grey.shade500),
+                  border: OutlineInputBorder(),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
                   ),
                 )),
-            const SizedBox(height: 20),
-
-            // Sandi Baru
-            const Text("Sandi Baru*",
-                style: TextStyle(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 5),
-            Obx(() => TextField(
-                  cursorColor: Colors.black,
-                  obscureText: !controller.showNewPassword.value,
-                  controller: controller.newPasswordController,
-                  decoration: InputDecoration(
-                    hintText: "Sandi Baru Anda",
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
+            const SizedBox(height: 24),
+            Obx(() => SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
                     ),
-                    enabledBorder: blackOutline,
-                    focusedBorder: blackOutline,
-                    border: blackOutline,
-                    suffixIcon: IconButton(
-                      icon: Icon(controller.showNewPassword.value
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () => controller.toggleNewPassword(),
-                    ),
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.sendResetLink,
+                    child: controller.isLoading.value
+                        ? const CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2)
+                        : const Text('Lanjutkan',
+                            style: TextStyle(color: Colors.white)),
                   ),
                 )),
-            const SizedBox(height: 5),
-            const Text("✓ Min. 8 karakter",
-                style: TextStyle(color: Colors.black)),
-
-            const SizedBox(height: 20),
-
-            // Konfirmasi Sandi Baru
-            const Text("Konfirmasi Sandi Baru*",
-                style: TextStyle(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 5),
-            Obx(() => TextField(
-                  cursorColor: Colors.black,
-                  obscureText: !controller.showConfirmPassword.value,
-                  controller: controller.confirmPasswordController,
-                  decoration: InputDecoration(
-                    hintText: "Konfirmasi Sandi Baru Anda",
-                    hintStyle: TextStyle(
-                      color: Colors.grey.shade400,
-                    ),
-                    enabledBorder: blackOutline,
-                    focusedBorder: blackOutline,
-                    border: blackOutline,
-                    suffixIcon: IconButton(
-                      icon: Icon(controller.showConfirmPassword.value
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () => controller.toggleConfirmPassword(),
-                    ),
-                  ),
-                )),
-
-            const SizedBox(height: 30),
-
-            SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  onPressed: controller.submit,
-                  child: const Text("Lanjutkan",
-                      style: TextStyle(color: Colors.white)),
-                ))
           ],
         ),
       ),

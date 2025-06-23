@@ -77,7 +77,6 @@ class AccountView extends GetView<AccountController> {
               const SizedBox(height: 16),
 
               // Menu List
-              _buildListTile('Alamat Tersimpan'),
               _buildListTile('Pembayaran'),
               _buildListTile('Pusat Bantuan'),
               _buildListTile('Pengaturan'),

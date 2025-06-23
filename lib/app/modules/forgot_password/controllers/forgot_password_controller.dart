@@ -1,50 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../routes/app_pages.dart';
 
 class ForgotPasswordController extends GetxController {
-  var showOldPassword = false.obs;
-  var showNewPassword = false.obs;
-  var showConfirmPassword = false.obs;
+  final emailController = TextEditingController();
+  final isLoading = false.obs;
 
-  final oldPasswordController = TextEditingController();
-  final newPasswordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  bool isValidEmail(String email) {
+    return GetUtils.isEmail(email);
+  }
 
-  void toggleOldPassword() => showOldPassword.toggle();
-  void toggleNewPassword() => showNewPassword.toggle();
-  void toggleConfirmPassword() => showConfirmPassword.toggle();
+  void sendResetLink() {
+    final email = emailController.text.trim();
 
-  void submit() {
-    final oldPass = oldPasswordController.text.trim();
-    final newPass = newPasswordController.text.trim();
-    final confirmPass = confirmPasswordController.text.trim();
-
-    if (newPass.length < 8) {
-      Get.snackbar("Error", "Password baru minimal 8 karakter");
+    if (email.isEmpty) {
+      Get.snackbar('Gagal', 'Email tidak boleh kosong.',
+          snackPosition: SnackPosition.BOTTOM);
       return;
     }
 
-    if (newPass != confirmPass) {
-      Get.snackbar("Error", "Konfirmasi sandi tidak cocok");
+    if (!isValidEmail(email)) {
+      Get.snackbar('Gagal', 'Format email tidak valid.',
+          snackPosition: SnackPosition.BOTTOM);
       return;
     }
 
-    // Simulasi proses ubah sandi
-    Get.snackbar("Sukses", "Password berhasil diubah",
-        snackPosition: SnackPosition.TOP);
+    isLoading.value = true;
 
-    // Navigasi ke login setelah 2 detik
+    // Simulasi pengiriman tautan reset
     Future.delayed(const Duration(seconds: 2), () {
-      Get.offAllNamed(Routes.LOGIN);
+      isLoading.value = false;
+
+      Get.snackbar(
+          'Berhasil', 'Tautan reset kata sandi telah dikirim ke email Anda.',
+          snackPosition: SnackPosition.BOTTOM);
+
+      // Contoh: arahkan ke login setelah berhasil
+      // Get.offNamed('/login');
     });
   }
 
   @override
   void onClose() {
-    oldPasswordController.dispose();
-    newPasswordController.dispose();
-    confirmPasswordController.dispose();
+    emailController.dispose();
     super.onClose();
   }
 }
