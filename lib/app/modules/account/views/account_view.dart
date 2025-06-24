@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/account_controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import '../controllers/account_controller.dart';
+import '../../help_center/views/help_center_view.dart';
+import '../../terms/views/terms_view.dart';
+import '../../privacy_policy/views/privacy_policy_view.dart';
 
 class AccountView extends GetView<AccountController> {
   const AccountView({super.key});
@@ -15,11 +20,9 @@ class AccountView extends GetView<AccountController> {
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Akun',
+          'Account',
           style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -42,8 +45,7 @@ class AccountView extends GetView<AccountController> {
                   child: Row(
                     children: [
                       const CircleAvatar(
-                        backgroundImage:
-                            AssetImage('assets/images/profile.jpg'),
+                        backgroundImage: AssetImage('assets/images/RYN.jpg'),
                         radius: 24,
                       ),
                       const SizedBox(width: 12),
@@ -77,16 +79,23 @@ class AccountView extends GetView<AccountController> {
               const SizedBox(height: 16),
 
               // Menu List
-              _buildListTile('Pembayaran'),
-              _buildListTile('Pusat Bantuan'),
-              _buildListTile('Pengaturan'),
+              _buildListTile('Payment'),
+              _buildListTile('Help Center',
+                  onTap: () => Get.to(() => const HelpCenterView())),
+              _buildListTile('Settings'),
               const Divider(
                 thickness: 2,
                 color: Colors.black,
               ),
-              _buildListTile('Syarat dan Ketentuan'),
-              _buildListTile('Kebijakan Privasi'),
-              _buildListTile('Media Sosial', icon: FontAwesomeIcons.instagram),
+              _buildListTile('Terms & Conditions',
+                  onTap: () => Get.to(() => const TermsView())),
+              _buildListTile('Privacy Policy',
+                  onTap: () => Get.to(() => const PrivacyPolicyView())),
+              _buildListTile(
+                'Social Media',
+                icon: FontAwesomeIcons.instagram,
+                onTap: _launchInstagram,
+              ),
 
               const Divider(
                 thickness: 2,
@@ -96,7 +105,7 @@ class AccountView extends GetView<AccountController> {
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Saran dan Masukan',
+                  'Feedback',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
@@ -104,7 +113,7 @@ class AccountView extends GetView<AccountController> {
               TextField(
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'Tulis disini . . .',
+                  hintText: 'Write here . . .',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: const BorderSide(color: Colors.black),
@@ -122,7 +131,7 @@ class AccountView extends GetView<AccountController> {
                   ),
                   onPressed: () {},
                   child: const Text(
-                    'Kirim',
+                    'Send',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -148,14 +157,24 @@ class AccountView extends GetView<AccountController> {
     );
   }
 
-  Widget _buildListTile(String title, {IconData? icon}) {
+  Widget _buildListTile(String title, {IconData? icon, VoidCallback? onTap}) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(title),
       trailing: icon != null
           ? Icon(icon, color: Colors.pink)
           : const Icon(Icons.arrow_forward_ios, size: 16),
-      onTap: () {},
+      onTap: onTap,
     );
+  }
+
+  void _launchInstagram() async {
+    final url = Uri.parse(
+        'https://www.instagram.com/pranayamasocialarea'); // Ganti 'akunmu'
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      Get.snackbar('Gagal', 'Tidak dapat membuka Instagram');
+    }
   }
 }

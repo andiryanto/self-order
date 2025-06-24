@@ -18,7 +18,7 @@ class NotificsView extends GetView<NotificsController> {
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          'Notifikasi',
+          'Notifications',
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
         ),
