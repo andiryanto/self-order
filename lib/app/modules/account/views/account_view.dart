@@ -83,10 +83,7 @@ class AccountView extends GetView<AccountController> {
               _buildListTile('Help Center',
                   onTap: () => Get.to(() => const HelpCenterView())),
               _buildListTile('Settings'),
-              const Divider(
-                thickness: 2,
-                color: Colors.black,
-              ),
+              const Divider(thickness: 2, color: Colors.black),
               _buildListTile('Terms & Conditions',
                   onTap: () => Get.to(() => const TermsView())),
               _buildListTile('Privacy Policy',
@@ -94,14 +91,13 @@ class AccountView extends GetView<AccountController> {
               _buildListTile(
                 'Social Media',
                 icon: FontAwesomeIcons.instagram,
+                iconColor: Colors.pink, // warna pink untuk Instagram
                 onTap: _launchInstagram,
               ),
-
-              const Divider(
-                thickness: 2,
-                color: Colors.black,
-              ),
+              const Divider(thickness: 2, color: Colors.black),
               const SizedBox(height: 12),
+
+              // Feedback
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -111,12 +107,22 @@ class AccountView extends GetView<AccountController> {
               ),
               const SizedBox(height: 18),
               TextField(
+                cursorColor: Colors.black,
                 maxLines: 4,
                 decoration: InputDecoration(
                   hintText: 'Write here . . .',
+                  hintStyle: const TextStyle(color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(color: Colors.black),
+                    borderSide: const BorderSide(color: Colors.black, width: 2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Colors.black, width: 2),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(color: Colors.black, width: 2),
                   ),
                 ),
               ),
@@ -137,6 +143,8 @@ class AccountView extends GetView<AccountController> {
                 ),
               ),
               const SizedBox(height: 24),
+
+              // Version & Logout
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -157,20 +165,20 @@ class AccountView extends GetView<AccountController> {
     );
   }
 
-  Widget _buildListTile(String title, {IconData? icon, VoidCallback? onTap}) {
+  Widget _buildListTile(String title,
+      {IconData? icon, Color? iconColor, VoidCallback? onTap}) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(title),
       trailing: icon != null
-          ? Icon(icon, color: Colors.pink)
+          ? Icon(icon, color: iconColor ?? Colors.black)
           : const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
     );
   }
 
   void _launchInstagram() async {
-    final url = Uri.parse(
-        'https://www.instagram.com/pranayamasocialarea'); // Ganti 'akunmu'
+    final url = Uri.parse('https://www.instagram.com/pranayamasocialarea');
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {

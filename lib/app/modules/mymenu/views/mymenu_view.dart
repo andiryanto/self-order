@@ -89,21 +89,24 @@ class MyMenuView extends GetView<MymenuController> {
                   children: [
                     const Text("Recommended",
                         style: TextStyle(fontWeight: FontWeight.bold)),
-                    DropdownButton<String>(
-                      value: controller.selectedOrderType.value,
-                      icon: const Icon(Icons.arrow_drop_down),
-                      underline: const SizedBox(),
-                      style: const TextStyle(color: Colors.black),
-                      items: const [
-                        DropdownMenuItem(
-                            value: "Takeaway", child: Text("Takeaway")),
-                        DropdownMenuItem(
-                            value: "Dine In", child: Text("Dine In")),
-                      ],
-                      onChanged: (value) {
-                        controller.selectedOrderType.value = value!;
-                      },
-                    ),
+                    Obx(() => DropdownButton<String>(
+                          value: controller.selectedOrderType.value,
+                          icon: const Icon(Icons.arrow_drop_down),
+                          underline: const SizedBox(),
+                          dropdownColor: Colors.white,
+                          style: const TextStyle(color: Colors.black),
+                          items: const [
+                            DropdownMenuItem(
+                                value: "Takeaway", child: Text("Takeaway")),
+                            DropdownMenuItem(
+                                value: "Dine In", child: Text("Dine In")),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              controller.selectedOrderType.value = value;
+                            }
+                          },
+                        )),
                   ],
                 ),
                 const SizedBox(height: 8),

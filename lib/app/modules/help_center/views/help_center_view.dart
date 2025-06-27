@@ -7,16 +7,23 @@ class HelpCenterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // ⬅️ pastikan layar putih
       appBar: AppBar(
-        title: const Text('Pusat Bantuan'),
+        title: const Text(
+          'Pusat Bantuan',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.white, // ⬅️ pastikan body putih
+        width: double.infinity,
+        height: double.infinity,
         padding: const EdgeInsets.all(16),
-        child: Text(
+        child: const Text(
           '''
 📞 Pusat Bantuan
 
@@ -31,7 +38,7 @@ Setiap hari pukul 08.00 - 21.00 WIB.
 
 Kami akan segera membantu Anda menyelesaikan permasalahan secepat mungkin. Terima kasih atas kepercayaan Anda.
           ''',
-          style: const TextStyle(fontSize: 16, height: 1.6),
+          style: TextStyle(fontSize: 16, height: 1.6),
         ),
       ),
     );

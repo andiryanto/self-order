@@ -8,16 +8,23 @@ class TermsView extends GetView<TermsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, // ⬅️ pastikan background putih
       appBar: AppBar(
-        title: const Text('Syarat dan Ketentuan'),
+        title: const Text(
+          'Syarat dan Ketentuan',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.white, // ⬅️ pastikan body putih
+        width: double.infinity,
+        height: double.infinity,
         padding: const EdgeInsets.all(16),
-        child: Text(
+        child: const Text(
           '''
 📜 Syarat dan Ketentuan
 
@@ -29,7 +36,7 @@ class TermsView extends GetView<TermsController> {
 
 Harap membaca ketentuan ini dengan seksama sebelum menggunakan layanan kami.
           ''',
-          style: const TextStyle(fontSize: 16, height: 1.6),
+          style: TextStyle(fontSize: 16, height: 1.6),
         ),
       ),
     );
