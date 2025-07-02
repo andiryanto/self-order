@@ -13,13 +13,10 @@ class LoginView extends GetView<LoginController> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Get.offAllNamed(Routes.ONBOARDING); // Back ke onboarding
-          },
+          onPressed: () => Get.offAllNamed(Routes.ONBOARDING),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text(
           "Masuk",
@@ -31,23 +28,15 @@ class LoginView extends GetView<LoginController> {
         ),
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.only(top: 24, left: 24, right: 24),
+        minimum: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/pranayama.jpeg',
-                height: 120,
-              ),
+              Image.asset('assets/images/pranayama.jpeg', height: 120),
               const SizedBox(height: 80),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Nomor Ponsel*",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ),
-              const SizedBox(height: 8),
+
+              /* ---------- Nomor Ponsel ---------- */
+              _label("Nomor Ponsel*"),
               TextField(
                 controller: controller.phoneController,
                 keyboardType: TextInputType.phone,
@@ -60,9 +49,7 @@ class LoginView extends GetView<LoginController> {
                   prefixIconConstraints:
                       const BoxConstraints(minWidth: 0, minHeight: 0),
                   hintText: 'Nomor ponsel anda',
-                  hintStyle: TextStyle(
-                    color: Colors.grey.shade400,
-                  ),
+                  hintStyle: TextStyle(color: Colors.grey.shade400),
                   border: const OutlineInputBorder(),
                   focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),
@@ -70,23 +57,16 @@ class LoginView extends GetView<LoginController> {
                 ),
               ),
               const SizedBox(height: 24),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Sandi*",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ),
-              const SizedBox(height: 8),
+
+              /* ---------- Password ---------- */
+              _label("Sandi*"),
               Obx(() => TextField(
                     controller: controller.passwordController,
                     obscureText: controller.obscurePassword.value,
                     cursorColor: Colors.black,
                     decoration: InputDecoration(
                       hintText: 'Sandi anda',
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade400,
-                      ),
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
                       border: const OutlineInputBorder(),
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.black),
@@ -103,49 +83,50 @@ class LoginView extends GetView<LoginController> {
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
-                  child: const Text(
-                    "Lupa sandi?",
-                    style: TextStyle(color: Colors.black),
-                  ),
+                  child: const Text("Lupa sandi?",
+                      style: TextStyle(color: Colors.black)),
                 ),
               ),
               const SizedBox(height: 32),
-              OutlinedButton(
-                onPressed: controller.login,
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text("Masuk"),
-              ),
+
+              /* ---------- Tombol Login ---------- */
+              Obx(() => SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: OutlinedButton(
+                      onPressed:
+                          controller.isLoading.value ? null : controller.login,
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: controller.isLoading.value
+                          ? const CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2)
+                          : const Text("Masuk"),
+                    ),
+                  )),
               const SizedBox(height: 35),
+
+              /* ---------- Arah ke Register ---------- */
               Center(
                 child: Column(
                   children: [
-                    const Text("Belum Punya Akun?"),
+                    const Text("Belum punya akun?"),
                     const SizedBox(height: 4),
                     GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.REGISTER);
-                      },
+                      onTap: () => Get.toNamed(Routes.REGISTER),
                       child: Column(
                         children: [
-                          const Text(
-                            "Daftar Sekarang",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
+                          const Text("Daftar Sekarang",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue)),
                           Container(
-                            height: 0.5,
-                            width: 80,
-                            color: Colors.blue,
-                          ),
+                              height: 0.5, width: 100, color: Colors.blue),
                         ],
                       ),
                     ),
@@ -159,4 +140,10 @@ class LoginView extends GetView<LoginController> {
       ),
     );
   }
+
+  /* ---------- Helper label ---------- */
+  Widget _label(String text) => Align(
+        alignment: Alignment.centerLeft,
+        child: Text(text, style: const TextStyle(fontWeight: FontWeight.w600)),
+      );
 }

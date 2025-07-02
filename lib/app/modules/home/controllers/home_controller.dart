@@ -1,15 +1,11 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class HomeController extends GetxController {
-  var username = 'Ryan'.obs;
-  var queueNumber = 50.obs;
+  var username = 'User'.obs;
+  var queueNumber = 0.obs;
+  var feedbacks = <String>[].obs;
 
-  var feedbacks = <String>[
-    'Good service, kopinya enak!!!. Baristanya ganteng',
-    'Tempatnya nyaman bggttt, pokoknya debesttt'
-  ].obs;
-
-  // Simulasi ambil data dari backend (bisa kamu ubah ke API call)
   @override
   void onInit() {
     super.onInit();
@@ -19,17 +15,15 @@ class HomeController extends GetxController {
   }
 
   void fetchUserData() {
-    // Simulasi: ambil dari backend / storage
-    username.value = 'Ryan';
+    final box = GetStorage();
+    username.value = box.read('username') ?? 'User';
   }
 
   void fetchQueueNumber() {
-    // Simulasi ambil dari server
-    queueNumber.value = 50;
+    queueNumber.value = 50; // Bisa ganti dari API
   }
 
   void fetchFeedbacks() {
-    // Simulasi ambil dari server
     feedbacks.value = [
       'Good service, kopinya enak!!!. Baristanya ganteng',
       'Tempatnya nyaman bggttt, pokoknya debesttt'

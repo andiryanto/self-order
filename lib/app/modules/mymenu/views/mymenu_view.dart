@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/mymenu_controller.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MyMenuView extends GetView<MymenuController> {
   const MyMenuView({super.key});
@@ -142,19 +144,36 @@ class MyMenuView extends GetView<MymenuController> {
 
                 const SizedBox(height: 24),
 
-                // Coffee
-                sectionHeader('Coffee', '5 Items'),
-                productCard('Americano', 'Kopi hitam tanpa gula',
-                    'assets/images/coffee.png', 'Rp 18.000'),
-                productCard('Dolce Latte', 'Susu + espresso + vanilla',
-                    'assets/images/coffee.png', 'Rp 24.000'),
-                productCard('Caramel Latte', 'Espresso & susu caramel',
-                    'assets/images/coffee.png', 'Rp 25.000'),
-                productCard('Kopi Pandan', 'Espresso + susu pandan',
-                    'assets/images/coffee.png', 'Rp 23.000'),
-                productCard('Cotton Latte', 'Espresso + susu cotton candy',
-                    'assets/images/coffee.png', 'Rp 26.000'),
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
+                  // Kalau kosong bisa tampilkan pesan
+                  if (controller.menus.isEmpty) {
+                    return const Center(child: Text('Belum ada menu'));
+                  }
+
+                  // ▸ Pilih salah satu:
+                  // 1. ListView (scroll sendiri) – cocok kalau produk banyak
+                  return ListView.builder(
+                    shrinkWrap: true, // jika di dalam NestedScrollView/Column
+                    physics: const ClampingScrollPhysics(),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    itemCount: controller.menus.length,
+                    itemBuilder: (context, index) {
+                      final item = controller.menus[index];
+
+                      return productCard(
+                        item['name'],
+                        item['description'] ?? '',
+                        'http://127.0.0.1:8000/storage/${item['image']}',
+                        'Rp ${item['price']}',
+                      );
+                    },
+                  );
+                }),
                 const SizedBox(height: 24),
 
                 // Non Coffee
@@ -274,7 +293,16 @@ class MyMenuView extends GetView<MymenuController> {
       ),
       child: Row(
         children: [
-          Image.asset(image, height: 60),
+          Image.network(
+            image,
+            height: 60,
+            width: 60,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.broken_image,
+                  size: 60, color: Colors.red);
+            },
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

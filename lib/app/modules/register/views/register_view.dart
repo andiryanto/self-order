@@ -40,8 +40,6 @@ class RegisterView extends GetView<RegisterController> {
                 hintText: "Alamat email anda"),
             _buildPhoneField(),
             _buildPasswordField(),
-            _buildTextField("Kode Referral*", controller.referralController,
-                hintText: "Kode referral anda"),
             const SizedBox(height: 16),
             _buildTermsCheckbox(),
             const SizedBox(height: 24),
@@ -122,7 +120,7 @@ class RegisterView extends GetView<RegisterController> {
         const SizedBox(height: 8),
         Obx(() => TextField(
               controller: controller.passwordController,
-              obscureText: controller.obscurePassword.value,
+              obscureText: controller.obscurePass.value,
               cursorColor: Colors.black,
               decoration: InputDecoration(
                 hintText: 'Buat Sandi',
@@ -134,10 +132,10 @@ class RegisterView extends GetView<RegisterController> {
                   borderSide: BorderSide(color: Colors.black),
                 ),
                 suffixIcon: IconButton(
-                  icon: Icon(controller.obscurePassword.value
+                  icon: Icon(controller.obscurePass.value
                       ? Icons.visibility_off
                       : Icons.visibility),
-                  onPressed: controller.togglePasswordVisibility,
+                  onPressed: controller.toggleObscure,
                 ),
               ),
             )),
@@ -160,7 +158,7 @@ class RegisterView extends GetView<RegisterController> {
           children: [
             Checkbox(
               value: controller.agreeTerms.value,
-              onChanged: (_) => controller.toggleAgreeTerms(),
+              onChanged: (_) => controller.toggleAgree(),
               activeColor: Colors.black,
               checkColor: Colors.white,
             ),
@@ -198,20 +196,26 @@ class RegisterView extends GetView<RegisterController> {
 
   // Tombol Submit
   Widget _buildSubmitButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 48,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
+    return Obx(() => SizedBox(
+          width: double.infinity,
+          height: 48,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            onPressed:
+                controller.isLoading.value ? null : () => controller.register(),
+            child: controller.isLoading.value
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  )
+                : const Text("Lanjutkan"),
           ),
-        ),
-        onPressed: controller.register,
-        child: const Text("Lanjutkan"),
-      ),
-    );
+        ));
   }
 }

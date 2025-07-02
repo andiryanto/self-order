@@ -1,28 +1,71 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:self_order/app/routes/app_pages.dart';
+import 'package:http/http.dart' as http;
+import 'package:get_storage/get_storage.dart';
 
 class LoginController extends GetxController {
+  /* ---------- Form Controller ---------- */
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
 
-  var obscurePassword = true.obs;
+  /* ---------- UI State ---------- */
+  final obscurePassword = true.obs;
+  final isLoading = false.obs;
 
-  void togglePasswordVisibility() {
-    obscurePassword.value = !obscurePassword.value;
+  /* ---------- Storage & Base URL ---------- */
+  final box = GetStorage();
+  final baseUrl = 'http://127.0.0.1:8000'; // ganti sesuai lingkungan
+
+  /* ---------- Toggle password visibility ---------- */
+  void togglePasswordVisibility() => obscurePassword.toggle();
+
+  /* ---------- LOGIN ACTION ---------- */
+  Future<void> login() async {
+    final phone = phoneController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (phone.isEmpty || password.isEmpty) {
+      Get.snackbar('Error', 'Mohon lengkapi semua data',
+          backgroundColor: Colors.red, colorText: Colors.white);
+      return;
+    }
+
+    isLoading(true);
+    try {
+      final res = await http.post(
+        Uri.parse('$baseUrl/api/login'),
+        body: {'phone': phone, 'password': password},
+      );
+
+      final data = json.decode(res.body);
+
+      if (res.statusCode == 200 && data['token'] != null) {
+        // simpan token & user
+        await box.write('token', data['token']);
+        await box.write('username', data['user']['name']);
+        await box.write('phone', data['user']['phone']);
+        Get.offAllNamed(Routes.HOME_MAIN);
+        Get.snackbar('Sukses', 'Login berhasil',
+            backgroundColor: Colors.green, colorText: Colors.white);
+      } else {
+        Get.snackbar('Gagal', data['message'] ?? 'Login gagal',
+            backgroundColor: Colors.red, colorText: Colors.white);
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString(),
+          backgroundColor: Colors.red, colorText: Colors.white);
+    } finally {
+      isLoading(false);
+    }
   }
 
-  void login() {
-    String phone = phoneController.text;
-    String password = passwordController.text;
-
-    if (phone.isNotEmpty && password.isNotEmpty) {
-      Get.snackbar("Sukses", "Login berhasil!",
-          backgroundColor: Colors.green, colorText: Colors.white);
-      Get.offAllNamed(Routes.HOME_MAIN);
-    } else {
-      Get.snackbar("Error", "Mohon lengkapi semua data",
-          backgroundColor: Colors.red, colorText: Colors.white);
-    }
+  /* ---------- Cleanup ---------- */
+  @override
+  void onClose() {
+    phoneController.dispose();
+    passwordController.dispose();
+    super.onClose();
   }
 }
