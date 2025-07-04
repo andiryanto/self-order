@@ -23,6 +23,7 @@ class MymenuController extends GetxController {
           await http.get(Uri.parse('http://127.0.0.1:8000/api/menus'));
 
       if (response.statusCode == 200) {
+        print('Data fetched successfully');
         final jsonData = json.decode(response.body);
         menus.value = jsonData['data']; // ← langsung assign list
       } else {
