@@ -4,16 +4,39 @@ import 'package:http/http.dart' as http;
 
 class MymenuController extends GetxController {
   var username = 'Ryan'.obs;
+
+  // Order type
   var selectedOrderType = 'Takeaway'.obs;
   final orderTypeOptions = ['Takeaway', 'Dine In'];
 
+  // Menu data
   var isLoading = false.obs;
-  var menus = [].obs; // List langsung tanpa model
+  var menus = <Map<String, dynamic>>[].obs;
+
+  // Filter
+  var selectedCategory = ''.obs; // '' artinya semua
+  var searchQuery = ''.obs;
+
+  // Filtered output
+  List<Map<String, dynamic>> get filteredMenus {
+    final query = searchQuery.value.toLowerCase();
+    final category = selectedCategory.value.toLowerCase();
+
+    return menus.where((item) {
+      final name = item['name']?.toString().toLowerCase() ?? '';
+      final itemCategory = item['category']?.toString().toLowerCase() ?? '';
+
+      final matchQuery = query.isEmpty || name.contains(query);
+      final matchCategory = category.isEmpty || itemCategory == category;
+
+      return matchQuery && matchCategory;
+    }).toList();
+  }
 
   @override
   void onInit() {
     super.onInit();
-    fetchMenus(); // Panggil API saat controller aktif
+    fetchMenus();
   }
 
   void fetchMenus() async {
@@ -23,14 +46,16 @@ class MymenuController extends GetxController {
           await http.get(Uri.parse('http://127.0.0.1:8000/api/menus'));
 
       if (response.statusCode == 200) {
-        print('Data fetched successfully');
         final jsonData = json.decode(response.body);
-        menus.value = jsonData['data']; // ← langsung assign list
+        menus.value = List<Map<String, dynamic>>.from(jsonData['data']);
+        print('Menu loaded: ${menus.length}');
       } else {
         Get.snackbar('Gagal', 'Gagal mengambil data menu');
+        menus.clear();
       }
     } catch (e) {
       Get.snackbar('Error', e.toString());
+      menus.clear();
     } finally {
       isLoading(false);
     }

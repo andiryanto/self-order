@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 import 'package:self_order/app/modules/home_main/controllers/home_main_controller.dart';
+import 'package:self_order/app/modules/mymenu/controllers/mymenu_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -36,6 +37,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => MymenuController(), fenix: true);
     return GetBuilder<HomeController>(
       init: HomeController(),
       builder: (controller) {
@@ -87,6 +89,8 @@ class HomeView extends GetView<HomeController> {
                           overlayColor: Colors.black26,
                         ),
                         onPressed: () {
+                          Get.find<MymenuController>().selectedOrderType.value =
+                              'Dine In';
                           Get.find<HomeMainController>().changeIndex(2);
                         },
                         child: Container(
@@ -132,6 +136,8 @@ class HomeView extends GetView<HomeController> {
                           overlayColor: Colors.black26,
                         ),
                         onPressed: () {
+                          Get.find<MymenuController>().selectedOrderType.value =
+                              'Takeaway';
                           Get.find<HomeMainController>().changeIndex(2);
                         },
                         child: Container(
