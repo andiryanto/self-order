@@ -1,4 +1,3 @@
-// lib/app/modules/account_detail/controllers/account_detail_controller.dart
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:self_order/app/data/models/user_model.dart';
 
 class AccountDetailController extends GetxController {
-  /* ---------- ambil user global, lalu bungkus .obs ---------- */
+  // Ambil user global dan jadikan observable
   final Rx<UserModel> user = Get.find<UserModel>().obs;
 
   late TextEditingController usernameC;
@@ -15,6 +14,7 @@ class AccountDetailController extends GetxController {
 
   final _picker = ImagePicker();
   final Rx<File?> imageFile = Rx<File?>(null);
+  bool isPicking = false;
 
   @override
   void onInit() {
@@ -24,34 +24,47 @@ class AccountDetailController extends GetxController {
     phoneC = TextEditingController(text: user.value.phone);
   }
 
-  /* ----- ganti foto ----- */
+  // ----------------- GANTI FOTO -----------------
   Future<void> pickImage() async {
-    final picked = await _picker.pickImage(source: ImageSource.gallery);
-    if (picked != null) {
-      imageFile.value = File(picked.path);
-      user.update((u) => u?.image = picked.path);
+    if (isPicking) return;
+    isPicking = true;
+
+    try {
+      final picked = await _picker.pickImage(source: ImageSource.gallery);
+      if (picked != null) {
+        imageFile.value = File(picked.path);
+        user.update((u) => u?.image = picked.path);
+      }
+    } catch (e) {
+      debugPrint('Image picker error: $e');
+    } finally {
+      isPicking = false;
     }
   }
 
-  /* ----- simpan profil ----- */
+  // ----------------- SIMPAN PROFIL -----------------
   Future<void> saveProfile() async {
     user.update((u) {
       if (u != null) {
         u.name = usernameC.text;
         u.email = emailC.text;
         u.phone = phoneC.text;
-        // gender di‑update di view via dropdown (lihat view)
+        // gender sudah di-update di view (dropdown)
         if (imageFile.value != null) {
           u.image = imageFile.value!.path;
         }
       }
     });
 
-    Get.snackbar('Sukses', 'Profil berhasil disimpan',
-        backgroundColor: Colors.green, colorText: Colors.white);
+    Get.snackbar(
+      'Sukses',
+      'Profil berhasil disimpan',
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
   }
 
-  /* ----- hapus akun ----- */
+  // ----------------- HAPUS AKUN -----------------
   Future<void> deleteAccount() async {
     Get.defaultDialog(
       title: 'Hapus Akun',
@@ -60,7 +73,7 @@ class AccountDetailController extends GetxController {
       textCancel: 'Tidak',
       confirmTextColor: Colors.white,
       cancelTextColor: Colors.black,
-      buttonColor: Colors.black, // <- ini ganti warna tombol "Ya"
+      buttonColor: Colors.black,
       onConfirm: () {
         Get.back();
         Get.snackbar(
@@ -69,7 +82,7 @@ class AccountDetailController extends GetxController {
           backgroundColor: Colors.red,
           colorText: Colors.white,
         );
-        // Get.offAllNamed('/login');
+        Get.offAllNamed('/login');
       },
     );
   }

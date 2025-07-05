@@ -80,7 +80,6 @@ class AccountView extends GetView<AccountController> {
               // Menu List
               _buildListTile('Help Center',
                   onTap: () => Get.to(() => const HelpCenterView())),
-              const Divider(thickness: 2, color: Colors.black),
               _buildListTile('Terms & Conditions',
                   onTap: () => Get.to(() => const TermsView())),
               _buildListTile('Privacy Policy',
@@ -139,7 +138,7 @@ class AccountView extends GetView<AccountController> {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 170),
 
               // Version & Logout
               Row(

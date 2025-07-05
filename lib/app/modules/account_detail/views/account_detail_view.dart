@@ -13,7 +13,7 @@ class AccountDetailView extends GetView<AccountDetailController> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: const BackButton(color: Colors.black),
-        title: const Text('Akun',
+        title: const Text('My Account',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -109,7 +109,7 @@ class AccountDetailView extends GetView<AccountDetailController> {
                       onPressed: controller.saveProfile,
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6)),
+                            borderRadius: BorderRadius.circular(8)),
                         backgroundColor: Colors.black,
                       ),
                       child: const Text(
