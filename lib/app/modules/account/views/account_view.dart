@@ -59,19 +59,18 @@ class AccountView extends GetView<AccountController> {
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                // aksi jika nomor ditekan
-                              },
-                              child: Text(
-                                controller.userPhone.value,
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            )
+                            Text(
+                              controller.userPhone.value,
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ],
                         ),
                       ),
-                      const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                      GestureDetector(
+                        onTap: () => Get.toNamed('/account-detail'),
+                        child: const Icon(Icons.arrow_forward_ios,
+                            color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
@@ -79,10 +78,8 @@ class AccountView extends GetView<AccountController> {
               const SizedBox(height: 16),
 
               // Menu List
-              _buildListTile('Payment'),
               _buildListTile('Help Center',
                   onTap: () => Get.to(() => const HelpCenterView())),
-              _buildListTile('Settings'),
               const Divider(thickness: 2, color: Colors.black),
               _buildListTile('Terms & Conditions',
                   onTap: () => Get.to(() => const TermsView())),

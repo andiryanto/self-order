@@ -4,6 +4,8 @@ import '../modules/about/bindings/about_binding.dart';
 import '../modules/about/views/about_view.dart';
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
+import '../modules/account_detail/bindings/account_detail_binding.dart';
+import '../modules/account_detail/views/account_detail_view.dart';
 import '../modules/all_feedback/bindings/all_feedback_binding.dart';
 import '../modules/all_feedback/views/all_feedback_view.dart';
 import '../modules/event/bindings/event_binding.dart';
@@ -119,6 +121,11 @@ class AppPages {
       name: _Paths.PRIVACY_POLICY,
       page: () => const PrivacyPolicyView(),
       binding: PrivacyPolicyBinding(),
+    ),
+    GetPage(
+      name: _Paths.ACCOUNT_DETAIL,
+      page: () => const AccountDetailView(),
+      binding: AccountDetailBinding(),
     ),
   ];
 }

@@ -22,6 +22,7 @@ abstract class Routes {
   static const HELP_CENTER = _Paths.HELP_CENTER;
   static const TERMS = _Paths.TERMS;
   static const PRIVACY_POLICY = _Paths.PRIVACY_POLICY;
+  static const ACCOUNT_DETAIL = _Paths.ACCOUNT_DETAIL;
 }
 
 abstract class _Paths {
@@ -45,4 +46,5 @@ abstract class _Paths {
   static const HELP_CENTER = '/help-center';
   static const TERMS = '/terms';
   static const PRIVACY_POLICY = '/privacy-policy';
+  static const ACCOUNT_DETAIL = '/account-detail';
 }

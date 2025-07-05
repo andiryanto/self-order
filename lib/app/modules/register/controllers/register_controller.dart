@@ -51,7 +51,7 @@ class RegisterController extends GetxController {
         await box.write('token', data['token']);
         Get.snackbar('Berhasil', 'Pendaftaran sukses',
             backgroundColor: Colors.green, colorText: Colors.white);
-        Get.offAllNamed('/home-main');
+        Get.offAllNamed('/login');
       } else {
         // gagal → tampilkan pesan dari server
         final msg = data['message'] ?? 'Terjadi kesalahan';
