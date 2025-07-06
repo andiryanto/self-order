@@ -165,6 +165,11 @@ class EventView extends GetView<EventController> {
                         itemCount: controller.filteredEvents.length,
                         itemBuilder: (context, index) {
                           final event = controller.filteredEvents[index];
+                          final imageUrl = (event['image'] != null &&
+                                  event['image'].toString().isNotEmpty)
+                              ? 'http://10.0.2.2:8000/storage/${event['image']}'
+                              : 'assets/images/default_event.png';
+
                           return Container(
                             margin: const EdgeInsets.only(bottom: 16),
                             decoration: BoxDecoration(
@@ -179,10 +184,16 @@ class EventView extends GetView<EventController> {
                                     topLeft: Radius.circular(12),
                                     topRight: Radius.circular(12),
                                   ),
-                                  child: Image.asset(
-                                    event.image,
+                                  child: Image.network(
+                                    imageUrl,
                                     width: double.infinity,
+                                    height: 180,
                                     fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => Image.asset(
+                                      'assets/images/default_event.png',
+                                      height: 180,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                                 Padding(
@@ -192,20 +203,20 @@ class EventView extends GetView<EventController> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        event.title,
+                                        event['name'] ?? '',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        event.date,
+                                        event['date'] ?? '',
                                         style: const TextStyle(
                                             color: Colors.black87),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        'Kategori: ${event.category}',
+                                        'Kategori: ${event['category'] ?? ''}',
                                         style: const TextStyle(
                                             fontStyle: FontStyle.italic,
                                             color: Colors.black54),

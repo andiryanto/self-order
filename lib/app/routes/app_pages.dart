@@ -8,6 +8,8 @@ import '../modules/account_detail/bindings/account_detail_binding.dart';
 import '../modules/account_detail/views/account_detail_view.dart';
 import '../modules/all_feedback/bindings/all_feedback_binding.dart';
 import '../modules/all_feedback/views/all_feedback_view.dart';
+import '../modules/checkout/bindings/checkout_binding.dart';
+import '../modules/checkout/views/checkout_view.dart';
 import '../modules/event/bindings/event_binding.dart';
 import '../modules/event/views/event_view.dart';
 import '../modules/forgot_password/bindings/forgot_password_binding.dart';
@@ -133,6 +135,11 @@ class AppPages {
       name: _Paths.PRODUCT_DETAIL,
       page: () => const ProductDetailView(),
       binding: ProductDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKOUT,
+      page: () => const CheckoutView(),
+      binding: CheckoutBinding(),
     ),
   ];
 }

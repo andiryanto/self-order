@@ -1,51 +1,51 @@
-// event_controller.dart
+// lib/app/modules/event/controllers/event_controller.dart
+import 'dart:convert';
 import 'package:get/get.dart';
-
-class EventModel {
-  final String title;
-  final String date;
-  final String image;
-  final String category;
-
-  EventModel({
-    required this.title,
-    required this.date,
-    required this.image,
-    required this.category,
-  });
-}
+import 'package:http/http.dart' as http;
 
 class EventController extends GetxController {
   var username = 'Ryan'.obs;
   var selectedCategory = ''.obs;
   var searchQuery = ''.obs;
 
-  final events = <EventModel>[
-    EventModel(
-        title: 'PARTY AKHIR PEKAN',
-        date: 'SABTU, 23 Desember 2023',
-        image: 'assets/images/PartyAkhir.png',
-        category: 'Musik'),
-    EventModel(
-        title: 'HANGGAR',
-        date: 'JUM\'AT, 1 Maret 2023',
-        image: 'assets/images/Hanggar.png',
-        category: 'Pameran'),
-    EventModel(
-        title: 'REGGAE NIGHT',
-        date: 'SABTU, 30 September 2023',
-        image: 'assets/images/Reggae.png',
-        category: 'Musik'),
-  ].obs;
+  var events = <Map<String, dynamic>>[].obs;
+  var isLoading = false.obs;
 
-  List<EventModel> get filteredEvents {
-    final query = searchQuery.value.toLowerCase();
-    final category = selectedCategory.value;
+  List<Map<String, dynamic>> get filteredEvents {
+    final q = searchQuery.value.toLowerCase();
+    final cat = selectedCategory.value;
 
     return events.where((e) {
-      final matchCategory = category.isEmpty || e.category == category;
-      final matchQuery = query.isEmpty || e.title.toLowerCase().contains(query);
-      return matchCategory && matchQuery;
+      final matchCat = cat.isEmpty || e['category'] == cat;
+      final matchQ = q.isEmpty || (e['name']?.toLowerCase() ?? '').contains(q);
+      return matchCat && matchQ;
     }).toList();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchEvents();
+  }
+
+  void fetchEvents() async {
+    try {
+      isLoading.value = true;
+
+      final url = Uri.parse('http://127.0.0.1:8000/api/events');
+      final res = await http.get(url);
+
+      if (res.statusCode == 200) {
+        final jsonData = json.decode(res.body);
+        events.value = List<Map<String, dynamic>>.from(jsonData['data'] ?? []);
+        print('Events loaded: ${events.length}');
+      } else {
+        Get.snackbar('Gagal', 'Gagal mengambil data event (${res.statusCode})');
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

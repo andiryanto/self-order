@@ -13,6 +13,9 @@ class MymenuController extends GetxController {
   var isLoading = false.obs;
   var menus = <Map<String, dynamic>>[].obs;
 
+  // Recommended menus
+  var recommendedMenus = <Map<String, dynamic>>[].obs;
+
   // Filter
   var selectedCategory = ''.obs; // '' artinya semua
   var searchQuery = ''.obs;
@@ -37,6 +40,7 @@ class MymenuController extends GetxController {
   void onInit() {
     super.onInit();
     fetchMenus();
+    fetchRecommendedMenus();
   }
 
   void fetchMenus() async {
@@ -58,6 +62,26 @@ class MymenuController extends GetxController {
       menus.clear();
     } finally {
       isLoading(false);
+    }
+  }
+
+  void fetchRecommendedMenus() async {
+    try {
+      final response = await http
+          .get(Uri.parse('http://127.0.0.1:8000/api/menus/recommended'));
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        recommendedMenus.value =
+            List<Map<String, dynamic>>.from(jsonData['data']);
+        print('Recommended menus loaded: ${recommendedMenus.length}');
+      } else {
+        Get.snackbar('Gagal', 'Gagal mengambil data rekomendasi menu');
+        recommendedMenus.clear();
+      }
+    } catch (e) {
+      Get.snackbar('Error', e.toString());
+      recommendedMenus.clear();
     }
   }
 }
