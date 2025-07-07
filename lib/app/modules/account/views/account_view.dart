@@ -106,7 +106,7 @@ class AccountView extends GetView<AccountController> {
                 cursorColor: Colors.black,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  hintText: 'Write here . . .',
+                  hintText: 'Tulis disini . . .',
                   hintStyle: const TextStyle(color: Colors.grey),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -133,7 +133,7 @@ class AccountView extends GetView<AccountController> {
                   ),
                   onPressed: () {},
                   child: const Text(
-                    'Send',
+                    'Kirim',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -148,7 +148,7 @@ class AccountView extends GetView<AccountController> {
                   TextButton(
                     onPressed: controller.logout,
                     child: const Text(
-                      'Logout',
+                      'Keluar',
                       style: TextStyle(color: Colors.red),
                     ),
                   )

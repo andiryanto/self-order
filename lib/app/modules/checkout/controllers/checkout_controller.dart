@@ -1,23 +1,27 @@
+// lib/app/modules/checkout/controllers/checkout_controller.dart
 import 'package:get/get.dart';
+import '../../shop/controllers/shop_controller.dart';
 
 class CheckoutController extends GetxController {
-  //TODO: Implement CheckoutController
+  final shopC = Get.find<ShopController>();
+  RxInt subtotal = 0.obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    countSubtotal();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void countSubtotal() {
+    int total = 0;
+    for (var item in shopC.items) {
+      total += item.price * item.qty;
+    }
+    subtotal.value = total;
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  void toPayment() {
+    // Nanti ke halaman payment, sementara belum ada
+    // Get.toNamed('/payment');
   }
-
-  void increment() => count.value++;
 }

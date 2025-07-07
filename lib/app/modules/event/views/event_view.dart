@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/event_controller.dart';
 
+const String _baseUrl = 'http://127.0.0.1:8000';
+
 class EventView extends GetView<EventController> {
   const EventView({super.key});
 
@@ -98,7 +100,6 @@ class EventView extends GetView<EventController> {
                                     'Musik',
                                     'Pameran',
                                     'Workshop',
-                                    'Lainnya',
                                   ].map((category) {
                                     final isSelected = controller
                                                 .selectedCategory.value ==
@@ -167,7 +168,7 @@ class EventView extends GetView<EventController> {
                           final event = controller.filteredEvents[index];
                           final imageUrl = (event['image'] != null &&
                                   event['image'].toString().isNotEmpty)
-                              ? 'http://10.0.2.2:8000/storage/${event['image']}'
+                              ? '$_baseUrl/storage/${event['image']}'
                               : 'assets/images/default_event.png';
 
                           return Container(
@@ -208,6 +209,18 @@ class EventView extends GetView<EventController> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
+                                      const SizedBox(height: 4),
+                                      if ((event['description'] ?? '')
+                                          .toString()
+                                          .isNotEmpty)
+                                        Text(
+                                          event['description'],
+                                          maxLines: 3, // batasi 3 baris
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 13),
+                                        ),
                                       const SizedBox(height: 4),
                                       Text(
                                         event['date'] ?? '',

@@ -9,10 +9,25 @@ class MyMenuView extends GetView<MymenuController> {
   @override
   Widget build(BuildContext context) {
     final c = Get.find<MymenuController>();
+
     final blackOutline = OutlineInputBorder(
       borderSide: const BorderSide(color: Colors.black),
       borderRadius: BorderRadius.circular(12),
     );
+
+    /* ---------- helper utk push ke halaman detail ---------- */
+    void _openDetail(Map<String, dynamic> data) {
+      Get.toNamed(
+        '/product-detail',
+        arguments: {
+          'name': data['name'],
+          'desc': data['description'],
+          'price': data['price'],
+          'image': data['image'],
+          'extras': data['extras'] ?? {}, // biar aman kalau null
+        },
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -48,15 +63,13 @@ class MyMenuView extends GetView<MymenuController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Search + Filter
+            /* ───────────── SEARCH + FILTER ───────────── */
             Row(
               children: [
                 Expanded(
                   child: TextField(
                     cursorColor: Colors.black,
-                    onChanged: (v) {
-                      c.searchQuery.value = v;
-                    },
+                    onChanged: (v) => c.searchQuery.value = v,
                     decoration: InputDecoration(
                       hintText: 'Search Product',
                       hintStyle: const TextStyle(color: Colors.grey),
@@ -84,10 +97,8 @@ class MyMenuView extends GetView<MymenuController> {
               ],
             ),
             const SizedBox(height: 12),
-            Obx(() => Text('Search Query: "${c.searchQuery.value}"')),
-            const SizedBox(height: 16),
 
-            // Recommended Header + Order Type
+            /* ───────────── HEADER REKOMENDASI ───────────── */
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -109,10 +120,9 @@ class MyMenuView extends GetView<MymenuController> {
                 ),
               ],
             ),
-
             const SizedBox(height: 8),
 
-            // Recommended List (dynamic from API)
+            /* ───────────── LIST REKOMENDASI (HORIZONTAL) ───────────── */
             Obx(() {
               if (c.recommendedMenus.isEmpty) {
                 return const Center(child: Text('Tidak ada rekomendasi'));
@@ -121,85 +131,68 @@ class MyMenuView extends GetView<MymenuController> {
                 height: 140,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(vertical: 8),
                   itemCount: c.recommendedMenus.length,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   itemBuilder: (_, i) {
                     final m = c.recommendedMenus[i];
                     return productHorizontalCard(
+                      data: m,
                       title: m['name'] ?? '',
                       subtitle: m['description'] ?? '',
                       price: 'Rp ${m['price']}',
-                      image:
-                          m['image'] != null && m['image'].toString().isNotEmpty
-                              ? 'http://127.0.0.1:8000/storage/${m['image']}'
-                              : 'assets/images/coffee.png',
+                      imageUrl: (m['image'] ?? '').toString().isNotEmpty
+                          ? 'http://127.0.0.1:8000/storage/${m['image']}'
+                          : 'assets/images/coffee.png',
+                      onTap: () => _openDetail(m),
                     );
                   },
                 ),
               );
             }),
-
             const SizedBox(height: 24),
 
-            // List Menu (filtered & grouped by category)
+            /* ───────────── LIST MENU (GROUPED BY CATEGORY) ───────────── */
             Obx(() {
-              if (c.isLoading.value) {
+              if (c.isLoading.value)
                 return const Center(child: CircularProgressIndicator());
-              }
               final list = c.filteredMenus;
-              if (list.isEmpty) {
+              if (list.isEmpty)
                 return const Center(child: Text('Tidak ada menu'));
+
+              // grup per kategori
+              final Map<String, List<Map<String, dynamic>>> grouped = {};
+              for (final m in list) {
+                final cat = (m['category'] ?? 'General').toString();
+                grouped.putIfAbsent(cat, () => []).add(m);
               }
 
-              // Group menu berdasarkan kategori
-              final Map<String, List<Map<String, dynamic>>> groupedMenus = {};
-              for (var menu in list) {
-                final cat = menu['category'] ?? 'General';
-                if (!groupedMenus.containsKey(cat)) {
-                  groupedMenus[cat] = [];
-                }
-                groupedMenus[cat]!.add(menu);
-              }
-
-              // Tampilkan kategori dan list menu per kategori
               return ListView(
                 shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                children: groupedMenus.entries.map((entry) {
-                  final category = entry.key;
-                  final menusByCategory = entry.value;
-
+                physics: const NeverScrollableScrollPhysics(),
+                children: grouped.entries.map((e) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 4),
-                        child: Text(
-                          category,
-                          style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
-                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(e.key,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18)),
                       ),
-                      ...menusByCategory.map((m) {
-                        return productCard(
-                          m['name'] ?? '',
-                          m['description'] ?? '',
-                          m['image'] != null && m['image'].toString().isNotEmpty
+                      ...e.value.map((m) => productCard(
+                          data: m,
+                          title: m['name'] ?? '',
+                          subtitle: m['description'] ?? '',
+                          imageUrl: (m['image'] ?? '').toString().isNotEmpty
                               ? 'http://127.0.0.1:8000/storage/${m['image']}'
                               : '',
-                          'Rp ${m['price']}',
-                        );
-                      }).toList(),
+                          price: 'Rp ${m['price']}',
+                          onTap: () => _openDetail(m))),
                     ],
                   );
                 }).toList(),
               );
             }),
-
-            const SizedBox(height: 24),
           ],
         ),
       ),
@@ -207,8 +200,17 @@ class MyMenuView extends GetView<MymenuController> {
   }
 }
 
-// Helpers & Widgets (sama seperti sebelumnya)
+/* ────────────────────────── BOTTOM SHEET FILTER ───────────────────────── */
 void _showFilterSheet(MymenuController c) {
+  final categories = [
+    'Semua',
+    'Coffee',
+    'Non Coffee',
+    'Snack',
+    'Ricebowl',
+    'Manual Brew',
+  ];
+
   Get.bottomSheet(
     Container(
       padding: const EdgeInsets.all(16),
@@ -224,14 +226,7 @@ void _showFilterSheet(MymenuController c) {
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
-            children: [
-              'Semua',
-              'Coffee',
-              'Non Coffee',
-              'Snack',
-              'Ricebowl',
-              'Manual Brew',
-            ].map((cat) {
+            children: categories.map((cat) {
               final selected = c.selectedCategory.value == cat ||
                   (cat == 'Semua' && c.selectedCategory.value == '');
               return ChoiceChip(
@@ -243,9 +238,10 @@ void _showFilterSheet(MymenuController c) {
                 backgroundColor: Colors.white,
                 checkmarkColor: selected ? Colors.white : Colors.black,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(
-                        color: selected ? Colors.white : Colors.black)),
+                  borderRadius: BorderRadius.circular(8),
+                  side:
+                      BorderSide(color: selected ? Colors.white : Colors.black),
+                ),
                 onSelected: (_) {
                   c.selectedCategory.value = cat == 'Semua' ? '' : cat;
                   Get.back();
@@ -259,101 +255,118 @@ void _showFilterSheet(MymenuController c) {
   );
 }
 
-Widget productCard(
-        String title, String subtitle, String imageUrl, String price) =>
-    Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
-      ),
-      child: Row(
-        children: [
-          imageUrl.isNotEmpty
-              ? Image.network(imageUrl,
-                  height: 60,
-                  width: 60,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) =>
-                      const Icon(Icons.broken_image, size: 60))
-              : const Icon(Icons.broken_image, size: 60),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                Text(subtitle, style: const TextStyle(color: Colors.grey)),
-                Text(price,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-              ],
+/* ────────────────────────── CARD WIDGETS ───────────────────────── */
+
+Widget productCard({
+  required Map<String, dynamic> data,
+  required String title,
+  required String subtitle,
+  required String imageUrl,
+  required String price,
+  required VoidCallback onTap,
+}) =>
+    InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        ),
+        child: Row(
+          children: [
+            imageUrl.isNotEmpty
+                ? Image.network(imageUrl,
+                    height: 60,
+                    width: 60,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) =>
+                        const Icon(Icons.broken_image, size: 60))
+                : const Icon(Icons.broken_image, size: 60),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.grey)),
+                  Text(price,
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
             ),
-          ),
-          IconButton(
-              icon: const Icon(Icons.add_box_rounded, color: Colors.black),
-              onPressed: () => print('Tambah item $title')),
-        ],
+            const Icon(Icons.add_box_rounded, color: Colors.black),
+          ],
+        ),
       ),
     );
 
-Widget productHorizontalCard(
-        {required String title,
-        required String subtitle,
-        required String price,
-        required String image}) =>
-    Container(
-      width: 220,
-      margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          image.isNotEmpty
-              ? Image.network(image, height: 60, width: 60, fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) {
-                  return Image.asset('assets/images/coffee.png',
-                      height: 60, width: 60, fit: BoxFit.cover);
-                })
-              : Image.asset(image, height: 60, width: 60, fit: BoxFit.cover),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 14)),
-                Text(subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(price,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 13)),
-                    IconButton(
-                      icon: const Icon(Icons.add_box_rounded,
-                          color: Colors.black),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      onPressed: () => print('Tambah item $title'),
-                    ),
-                  ],
-                ),
-              ],
+Widget productHorizontalCard({
+  required Map<String, dynamic> data,
+  required String title,
+  required String subtitle,
+  required String price,
+  required String imageUrl,
+  required VoidCallback onTap,
+}) =>
+    InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 220,
+        margin: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            imageUrl.startsWith('http')
+                ? Image.network(imageUrl,
+                    height: 60,
+                    width: 60,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Image.asset(
+                        'assets/images/coffee.png',
+                        height: 60,
+                        width: 60,
+                        fit: BoxFit.cover))
+                : Image.asset(imageUrl,
+                    height: 60, width: 60, fit: BoxFit.cover),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 14)),
+                  Text(subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(price,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 13)),
+                      const Icon(Icons.add_box_rounded, color: Colors.black),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );

@@ -1,4 +1,3 @@
-// lib/app/modules/account_detail/views/account_detail_view.dart
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,8 +34,8 @@ class AccountDetailView extends GetView<AccountDetailController> {
                           radius: 70,
                           backgroundImage: controller.imageFile.value != null
                               ? FileImage(controller.imageFile.value!)
-                              : controller.user.value.image.isNotEmpty
-                                  ? FileImage(File(controller.user.value.image))
+                              : controller.imagePath.value.isNotEmpty
+                                  ? FileImage(File(controller.imagePath.value))
                                   : const AssetImage(
                                           'assets/images/default-avatar.png')
                                       as ImageProvider,
@@ -74,17 +73,13 @@ class AccountDetailView extends GetView<AccountDetailController> {
                 const SizedBox(height: 20),
                 _label('Jenis Kelamin'),
                 DropdownButtonFormField<String>(
-                  value: controller.user.value.gender,
+                  value: controller.gender.value,
                   items: const [
-                    DropdownMenuItem(
-                        value: 'Laki-laki', child: Text('Laki-laki')),
-                    DropdownMenuItem(
-                        value: 'Perempuan', child: Text('Perempuan')),
+                    DropdownMenuItem(value: 'Male', child: Text('Laki-laki')),
+                    DropdownMenuItem(value: 'Female', child: Text('Perempuan')),
                   ],
                   onChanged: (value) {
-                    controller.user.update((val) {
-                      if (val != null) val.gender = value ?? '';
-                    });
+                    controller.gender.value = value ?? 'Male';
                   },
                   decoration: _decoration(),
                   dropdownColor: Colors.white,
