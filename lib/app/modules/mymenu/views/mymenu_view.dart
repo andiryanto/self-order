@@ -1,6 +1,6 @@
-// lib/app/modules/mymenu/views/mymenu_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../shop/controllers/shop_controller.dart';
 import '../controllers/mymenu_controller.dart';
 
 class MyMenuView extends GetView<MymenuController> {
@@ -9,13 +9,13 @@ class MyMenuView extends GetView<MymenuController> {
   @override
   Widget build(BuildContext context) {
     final c = Get.find<MymenuController>();
+    final shopC = Get.find<ShopController>();
 
     final blackOutline = OutlineInputBorder(
       borderSide: const BorderSide(color: Colors.black),
       borderRadius: BorderRadius.circular(12),
     );
 
-    /* ---------- helper utk push ke halaman detail ---------- */
     void _openDetail(Map<String, dynamic> data) {
       Get.toNamed(
         '/product-detail',
@@ -24,7 +24,7 @@ class MyMenuView extends GetView<MymenuController> {
           'desc': data['description'],
           'price': data['price'],
           'image': data['image'],
-          'extras': data['extras'] ?? {}, // biar aman kalau null
+          'extras': data['extras'] ?? {},
         },
       );
     }
@@ -63,7 +63,6 @@ class MyMenuView extends GetView<MymenuController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /* ───────────── SEARCH + FILTER ───────────── */
             Row(
               children: [
                 Expanded(
@@ -97,8 +96,6 @@ class MyMenuView extends GetView<MymenuController> {
               ],
             ),
             const SizedBox(height: 12),
-
-            /* ───────────── HEADER REKOMENDASI ───────────── */
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -114,19 +111,18 @@ class MyMenuView extends GetView<MymenuController> {
                         .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                         .toList(),
                     onChanged: (v) {
-                      if (v != null) c.selectedOrderType.value = v;
+                      if (v != null) {
+                        c.selectedOrderType.value = v;
+                        shopC.setOrderType(v);
+                      }
                     },
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-
-            /* ───────────── LIST REKOMENDASI (HORIZONTAL) ───────────── */
             Obx(() {
-              if (c.recommendedMenus.isEmpty) {
-                return const Center(child: Text('Tidak ada rekomendasi'));
-              }
+              if (c.recommendedMenus.isEmpty) return const SizedBox();
               return SizedBox(
                 height: 140,
                 child: ListView.builder(
@@ -150,16 +146,12 @@ class MyMenuView extends GetView<MymenuController> {
               );
             }),
             const SizedBox(height: 24),
-
-            /* ───────────── LIST MENU (GROUPED BY CATEGORY) ───────────── */
             Obx(() {
               if (c.isLoading.value)
                 return const Center(child: CircularProgressIndicator());
               final list = c.filteredMenus;
-              if (list.isEmpty)
-                return const Center(child: Text('Tidak ada menu'));
+              if (list.isEmpty) return const SizedBox();
 
-              // grup per kategori
               final Map<String, List<Map<String, dynamic>>> grouped = {};
               for (final m in list) {
                 final cat = (m['category'] ?? 'General').toString();
@@ -200,7 +192,6 @@ class MyMenuView extends GetView<MymenuController> {
   }
 }
 
-/* ────────────────────────── BOTTOM SHEET FILTER ───────────────────────── */
 void _showFilterSheet(MymenuController c) {
   final categories = [
     'Semua',
@@ -208,7 +199,7 @@ void _showFilterSheet(MymenuController c) {
     'Non Coffee',
     'Snack',
     'Ricebowl',
-    'Manual Brew',
+    'Manual Brew'
   ];
 
   Get.bottomSheet(
@@ -254,8 +245,6 @@ void _showFilterSheet(MymenuController c) {
     ),
   );
 }
-
-/* ────────────────────────── CARD WIDGETS ───────────────────────── */
 
 Widget productCard({
   required Map<String, dynamic> data,

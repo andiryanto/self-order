@@ -80,14 +80,11 @@ class ProductDetailController extends GetxController {
     ));
 
     Get.back();
-    Get.showSnackbar(const GetSnackBar(
-      title: 'Berhasil',
-      message: 'Produk ditambahkan ke keranjang',
-      backgroundColor: Color(0xFF000000),
+    Get.snackbar(
+      'Berhasil',
+      'Produk ditambahkan ke keranjang',
       duration: Duration(seconds: 2),
       snackPosition: SnackPosition.BOTTOM,
-      margin: EdgeInsets.all(12),
-      borderRadius: 8,
-    ));
+    );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../controllers/account_controller.dart';
 import '../../help_center/views/help_center_view.dart';
 import '../../terms/views/terms_view.dart';
@@ -35,46 +34,44 @@ class AccountView extends GetView<AccountController> {
           child: Column(
             children: [
               // Profile Card
-              Obx(
-                () => Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      const CircleAvatar(
-                        backgroundImage: AssetImage('assets/images/RYN.jpg'),
-                        radius: 24,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              controller.userName.value,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              controller.userPhone.value,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ],
+              Obx(() => Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          backgroundImage: AssetImage('assets/images/RYN.jpg'),
+                          radius: 24,
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () => Get.toNamed('/account-detail'),
-                        child: const Icon(Icons.arrow_forward_ios,
-                            color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                controller.userName.value,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                controller.userPhone.value,
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => Get.toNamed('/account-detail'),
+                          child: const Icon(Icons.arrow_forward_ios,
+                              color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  )),
               const SizedBox(height: 16),
 
               // Menu List
@@ -87,7 +84,7 @@ class AccountView extends GetView<AccountController> {
               _buildListTile(
                 'Social Media',
                 icon: FontAwesomeIcons.instagram,
-                iconColor: Colors.pink, // warna pink untuk Instagram
+                iconColor: Colors.pink,
                 onTap: _launchInstagram,
               ),
               const Divider(thickness: 2, color: Colors.black),
@@ -103,8 +100,8 @@ class AccountView extends GetView<AccountController> {
               ),
               const SizedBox(height: 18),
               TextField(
-                cursorColor: Colors.black,
                 maxLines: 4,
+                controller: controller.feedbackController,
                 decoration: InputDecoration(
                   hintText: 'Tulis disini . . .',
                   hintStyle: const TextStyle(color: Colors.grey),
@@ -125,18 +122,29 @@ class AccountView extends GetView<AccountController> {
               const SizedBox(height: 12),
               Align(
                 alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                  ),
-                  onPressed: () {},
-                  child: const Text(
-                    'Kirim',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+                child: Obx(() => ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : controller.submitFeedback,
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              'Kirim',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                    )),
               ),
               const SizedBox(height: 170),
 

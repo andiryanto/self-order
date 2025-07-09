@@ -11,18 +11,25 @@ class AllFeedbackView extends GetView<AllFeedbackController> {
   Widget build(BuildContext context) {
     final homeController = Get.find<HomeController>();
 
+    // Pastikan feedbacks di-fetch
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (homeController.feedbacks.isEmpty) {
+        homeController.fetchFeedbacks();
+      }
+    });
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white, // warna status bar
-        statusBarIconBrightness: Brightness.dark, // ikon status bar jadi hitam
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
       ),
       child: Scaffold(
-        backgroundColor: Colors.white, // background body putih
+        backgroundColor: Colors.white,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(56),
           child: AppBar(
             backgroundColor: Colors.white,
-            elevation: 0, // hilangkan shadow AppBar
+            elevation: 0,
             centerTitle: true,
             foregroundColor: Colors.black,
             automaticallyImplyLeading: true,
@@ -40,28 +47,47 @@ class AllFeedbackView extends GetView<AllFeedbackController> {
             ),
           ),
         ),
-        body: Obx(() => ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: homeController.feedbacks.length,
-              itemBuilder: (context, index) {
-                final feedback = homeController.feedbacks[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 2),
-                    ],
-                  ),
-                  child: Text(
-                    feedback,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                );
-              },
-            )),
+        body: Obx(() {
+          final feedbackList = homeController.feedbacks;
+
+          if (feedbackList.isEmpty) {
+            return const Center(
+              child: Text(
+                'Belum ada feedback.',
+                style: TextStyle(color: Colors.grey),
+              ),
+            );
+          }
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: feedbackList.length,
+            itemBuilder: (context, index) {
+              final feedback = feedbackList[index];
+              return Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black12, blurRadius: 2),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 4),
+                    Text(
+                      feedback['message'] ?? '',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        }),
       ),
     );
   }

@@ -69,14 +69,24 @@ class AboutView extends GetView<AboutController> {
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 const SizedBox(height: 20),
-                crewCard('Chaeru Syam', 'Owner', 'male',
-                    'https://instagram.com/c.syam1'),
-                crewCard('Rofi Akbar', 'Staff', 'male',
-                    'https://instagram.com/___.nrrof'),
-                crewCard('Adli Khoirullah', 'Staff', 'male',
-                    'https://instagram.com/heidli_'),
-                crewCard('Rahayu', 'Staff', 'female',
-                    'https://instagram.com/rahayunngrm'),
+
+                Obx(() {
+                  if (controller.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (controller.crewList.isEmpty) {}
+                  return Column(
+                    children: controller.crewList.map((crew) {
+                      final gender = crew['gender'] ??
+                          'male'; // kalau gender belum ada di backend, default male
+                      final instaUrl = crew['instagram'] ?? '';
+                      final name = crew['name'] ?? 'Unknown';
+                      final role = crew['position'] ?? 'Staff';
+
+                      return crewCard(name, role, gender, instaUrl);
+                    }).toList(),
+                  );
+                }),
               ],
             ),
           ),
@@ -87,7 +97,7 @@ class AboutView extends GetView<AboutController> {
 
   /// Kartu kru dengan link Instagram
   Widget crewCard(String name, String role, String gender, String instaUrl) {
-    final imagePath = gender == 'female'
+    final imagePath = gender.toLowerCase() == 'female'
         ? 'assets/images/woman.jpg'
         : 'assets/images/man.jpg';
 

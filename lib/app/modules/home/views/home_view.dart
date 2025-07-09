@@ -7,37 +7,10 @@ import 'package:self_order/app/modules/mymenu/controllers/mymenu_controller.dart
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
-  Widget promoCard(String imagePath) {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
-      width: 80,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => MymenuController(), fenix: true);
+
     return GetBuilder<HomeController>(
       init: HomeController(),
       builder: (controller) {
@@ -76,6 +49,7 @@ class HomeView extends GetView<HomeController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Tombol Dine-In dan Takeaway
                 Row(
                   children: [
                     Expanded(
@@ -113,11 +87,8 @@ class HomeView extends GetView<HomeController> {
                               Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: Icon(
-                                  Icons.restaurant,
-                                  color: Colors.black,
-                                  size: 32,
-                                ),
+                                child: Icon(Icons.restaurant,
+                                    color: Colors.black, size: 32),
                               ),
                             ],
                           ),
@@ -160,11 +131,8 @@ class HomeView extends GetView<HomeController> {
                               Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: Icon(
-                                  Icons.shopping_bag,
-                                  color: Colors.black,
-                                  size: 32,
-                                ),
+                                child: Icon(Icons.shopping_bag,
+                                    color: Colors.black, size: 32),
                               ),
                             ],
                           ),
@@ -173,30 +141,67 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 20),
+
+                // PROMO
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text('Promo!',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 18)),
+                  children: [
+                    const Text(
+                      'Promo!',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                    ),
+                    GestureDetector(
+                      onTap: () => Get.toNamed('/all-promo'),
+                      child: const Text('See All',
+                          style: TextStyle(color: Colors.grey)),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
                 SizedBox(
                   height: 150,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      promoCard('assets/images/Promo1.jpg'),
-                      promoCard('assets/images/Promo2.jpg'),
-                      promoCard('assets/images/Promo3.jpg'),
-                      promoCard('assets/images/Promo4.jpg'),
-                      promoCard('assets/images/Promo5.jpg'),
-                    ],
-                  ),
+                  child: Obx(() {
+                    if (controller.promos.isEmpty) {}
+                    return ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller.promos.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 10),
+                      itemBuilder: (context, index) {
+                        final promo = controller.promos[index];
+                        return Container(
+                          width: 120,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              promo['image'] ?? '',
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) =>
+                                  const Center(child: Icon(Icons.broken_image)),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }),
                 ),
+
                 const SizedBox(height: 20),
+
+                // ANTRIAN
                 const Text('Antrian!',
                     style:
                         TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
@@ -208,7 +213,7 @@ class HomeView extends GetView<HomeController> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 4),
+                      BoxShadow(color: Colors.black12, blurRadius: 4)
                     ],
                   ),
                   child: Obx(() => Column(
@@ -220,7 +225,10 @@ class HomeView extends GetView<HomeController> {
                         ],
                       )),
                 ),
+
                 const SizedBox(height: 20),
+
+                // FEEDBACK
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -230,15 +238,9 @@ class HomeView extends GetView<HomeController> {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Get.toNamed('/all-feedback');
-                      },
-                      child: const Text(
-                        'See All',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
+                      onTap: () => Get.toNamed('/all-feedback'),
+                      child: const Text('See All',
+                          style: TextStyle(color: Colors.grey)),
                     ),
                   ],
                 ),
@@ -257,13 +259,15 @@ class HomeView extends GetView<HomeController> {
                                       color: Colors.black12, blurRadius: 4)
                                 ],
                               ),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  feedback,
-                                  style: const TextStyle(fontSize: 14),
-                                  textAlign: TextAlign.left,
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    feedback['message'] ?? '',
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ],
                               ),
                             ),
                           )

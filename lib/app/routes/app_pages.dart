@@ -8,6 +8,8 @@ import '../modules/account_detail/bindings/account_detail_binding.dart';
 import '../modules/account_detail/views/account_detail_view.dart';
 import '../modules/all_feedback/bindings/all_feedback_binding.dart';
 import '../modules/all_feedback/views/all_feedback_view.dart';
+import '../modules/all_promo/bindings/all_promo_binding.dart';
+import '../modules/all_promo/views/all_promo_view.dart';
 import '../modules/checkout/bindings/checkout_binding.dart';
 import '../modules/checkout/views/checkout_view.dart';
 import '../modules/event/bindings/event_binding.dart';
@@ -140,6 +142,11 @@ class AppPages {
       name: _Paths.CHECKOUT,
       page: () => const CheckoutView(),
       binding: CheckoutBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALL_PROMO,
+      page: () => const AllPromoView(),
+      binding: AllPromoBinding(),
     ),
   ];
 }

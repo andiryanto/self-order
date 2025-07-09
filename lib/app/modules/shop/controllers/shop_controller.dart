@@ -3,22 +3,30 @@ import 'package:intl/intl.dart';
 import '../models/shop_item_model.dart';
 
 class ShopController extends GetxController {
+  // ===== DATA =====
   final items = <ShopItemModel>[].obs;
 
-  /// Formatter untuk harga
-  static final _fmt =
-      NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
+  // ===== ORDER TYPE =====
+  var orderType = 'Takeaway'.obs;
 
-  /// Subtotal semua item
+  void setOrderType(String type) {
+    orderType.value = type;
+  }
+
+  // ===== FORMATTER =====
+  static final _fmt = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: 'Rp',
+    decimalDigits: 0,
+  );
+
+  // ===== SUBTOTAL =====
   int get subtotal => items.fold(0, (sum, item) => sum + item.price * item.qty);
   String get subtotalLabel => _fmt.format(subtotal);
 
-  /// Format harga individual
   String priceLabel(int price) => _fmt.format(price);
 
-  /* ------------------ ACTIONS ------------------ */
-
-  /// Tambah item baru ke keranjang (merge kalau sudah ada)
+  // ===== ACTIONS =====
   void add(ShopItemModel item) {
     final idx = items.indexWhere((e) => e.name == item.name);
     if (idx != -1) {
@@ -32,13 +40,11 @@ class ShopController extends GetxController {
     items.refresh();
   }
 
-  /// Tambah qty
   void inc(int index) {
     items[index].qty++;
     items.refresh();
   }
 
-  /// Kurangi qty (hapus jika qty 1)
   void dec(int index) {
     if (items[index].qty > 1) {
       items[index].qty--;
@@ -48,13 +54,11 @@ class ShopController extends GetxController {
     items.refresh();
   }
 
-  /// Hapus item
   void remove(int index) {
     items.removeAt(index);
     items.refresh();
   }
 
-  /// Update item topping/catatan
   void updateItem(int index, {String? note, List<String>? extras}) {
     final item = items[index];
     if (note != null) item.note = note;

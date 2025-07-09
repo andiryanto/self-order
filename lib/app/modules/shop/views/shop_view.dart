@@ -16,16 +16,20 @@ class ShopView extends GetView<ShopController> {
 
   /* ---------- WIDGET BANTUAN ---------- */
   Widget _itemImage(String img) => img.startsWith('http')
-      ? Image.network(img,
+      ? Image.network(
+          img,
           width: 55,
           height: 55,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => const Icon(Icons.broken_image))
-      : Image.asset(img,
+          errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+        )
+      : Image.asset(
+          img,
           width: 55,
           height: 55,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => const Icon(Icons.broken_image));
+          errorBuilder: (_, __, ___) => const Icon(Icons.broken_image),
+        );
 
   Widget _addItemButton() => OutlinedButton(
         style: OutlinedButton.styleFrom(
@@ -33,7 +37,6 @@ class ShopView extends GetView<ShopController> {
           minimumSize: const Size(80, 40),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
         ),
-        /* ---------- Aksi Tambah Item ---------- */
         onPressed: () {
           Get.until((route) => route.settings.name == Routes.HOME_MAIN);
           Get.find<HomeMainController>().changeIndex(2);
@@ -57,32 +60,36 @@ class ShopView extends GetView<ShopController> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: const Text('Shop',
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 18)),
+        title: const Text(
+          'Shop',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
+          ),
+        ),
       ),
       body: Column(
         children: [
-          // BAR ORDER TYPE
-          Container(
-            width: double.infinity,
-            color: Colors.grey[300],
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: const Center(
-              child: Text('Takeaway',
-                  style: TextStyle(fontWeight: FontWeight.w500)),
-            ),
-          ),
+          // ✅ ORDER TYPE BAR (DYNAMIC)
+          Obx(() => Container(
+                width: double.infinity,
+                color: Colors.grey[300],
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Center(
+                  child: Text(
+                    controller.orderType.value,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                ),
+              )),
 
-          /* ---------- LIST ITEM ---------- */
+          // ---------- LIST ITEM ----------
           Expanded(
             child: Obx(() {
               final items = controller.items;
 
               if (items.isEmpty) {
-                // Kosong → tombol di tengah
                 return Center(child: _addItemButton());
               }
 
@@ -92,7 +99,6 @@ class ShopView extends GetView<ShopController> {
                 itemCount: items.length + 1, // ekstra 1 utk tombol
                 itemBuilder: (context, index) {
                   if (index == items.length) {
-                    // Baris terakhir = tombol Tambah Item
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       child: _addItemButton(),
@@ -114,9 +120,11 @@ class ShopView extends GetView<ShopController> {
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: Text(item.name,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.bold)),
+                                      child: Text(
+                                        item.name,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                     IconButton(
                                       icon: const Icon(Icons.edit_outlined,
@@ -127,9 +135,11 @@ class ShopView extends GetView<ShopController> {
                                     ),
                                   ],
                                 ),
-                                Text(item.desc,
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.grey)),
+                                Text(
+                                  item.desc,
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.grey),
+                                ),
                                 const SizedBox(height: 6),
                                 Text(fmt.format(item.price)),
                               ],
@@ -163,12 +173,13 @@ class ShopView extends GetView<ShopController> {
             }),
           ),
 
-          /* ---------- FOOTER SUBTOTAL + CHECKOUT ---------- */
+          // ---------- FOOTER: SUBTOTAL + CHECKOUT ----------
           Obx(() => Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  border: Border(top: BorderSide(color: Colors.grey.shade300)),
+                  border: Border(
+                      top: BorderSide(color: Colors.grey.shade300, width: 1)),
                 ),
                 child: Row(
                   children: [
@@ -190,7 +201,7 @@ class ShopView extends GetView<ShopController> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6)),
                       ),
-                      onPressed: () {},
+                      onPressed: () => Get.toNamed(Routes.CHECKOUT),
                       child: const Text('Checkout'),
                     ),
                   ],

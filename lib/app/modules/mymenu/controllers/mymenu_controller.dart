@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import '../../shop/controllers/shop_controller.dart';
 
 class MymenuController extends GetxController {
   var username = 'Ryan'.obs;
@@ -41,6 +42,10 @@ class MymenuController extends GetxController {
     super.onInit();
     fetchMenus();
     fetchRecommendedMenus();
+
+    // Set default orderType ke ShopController saat awal
+    final shopC = Get.find<ShopController>();
+    shopC.orderType.value = selectedOrderType.value;
   }
 
   void fetchMenus() async {
@@ -83,5 +88,13 @@ class MymenuController extends GetxController {
       Get.snackbar('Error', e.toString());
       recommendedMenus.clear();
     }
+  }
+
+  void updateOrderType(String value) {
+    selectedOrderType.value = value;
+
+    // Sinkronkan ke ShopController juga
+    final shopC = Get.find<ShopController>();
+    shopC.orderType.value = value;
   }
 }
