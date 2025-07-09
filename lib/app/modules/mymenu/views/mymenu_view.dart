@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../shop/controllers/shop_controller.dart';
 import '../controllers/mymenu_controller.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:self_order/app/modules/notifics/controllers/notifics_controller.dart';
 
 class MyMenuView extends GetView<MymenuController> {
   const MyMenuView({super.key});
@@ -15,18 +17,26 @@ class MyMenuView extends GetView<MymenuController> {
       borderSide: const BorderSide(color: Colors.black),
       borderRadius: BorderRadius.circular(12),
     );
-
+    final notificsController = Get.put(NotificsController());
     void _openDetail(Map<String, dynamic> data) {
-      Get.toNamed(
-        '/product-detail',
-        arguments: {
-          'name': data['name'],
-          'desc': data['description'],
-          'price': data['price'],
-          'image': data['image'],
-          'extras': data['extras'] ?? {},
-        },
-      );
+      final image = (data['image'] ?? '').toString();
+      final imagePath = image.isNotEmpty
+          ? 'http://127.0.0.1:8000/storage/$image'
+          : 'assets/images/coffee.png';
+
+      // ✅ Fix: memastikan harga bisa di-parse walau formatnya string
+      final rawPrice = data['price'];
+      final parsedPrice = rawPrice is int
+          ? rawPrice
+          : int.tryParse(rawPrice.toString().replaceAll('.', '')) ?? 0;
+
+      Get.toNamed('/product-detail', arguments: {
+        'name': data['name'],
+        'desc': data['description'],
+        'price': data['price'],
+        'image': imagePath,
+        'extras': data['extras'] ?? {},
+      });
     }
 
     return Scaffold(
@@ -43,10 +53,25 @@ class MyMenuView extends GetView<MymenuController> {
                   fontSize: 18),
             )),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_none, color: Colors.black),
-            onPressed: () => Get.toNamed('/notifics'),
-          ),
+          Obx(() {
+            final count = notificsController.notifications.length;
+            return badges.Badge(
+              showBadge: count > 0,
+              badgeContent: Text(
+                '$count',
+                style: const TextStyle(color: Colors.white, fontSize: 10),
+              ),
+              position: badges.BadgePosition.topEnd(top: 0, end: 3),
+              badgeStyle: const badges.BadgeStyle(
+                badgeColor: Colors.red,
+                padding: EdgeInsets.all(5),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.notifications_none, color: Colors.black),
+                onPressed: () => Get.toNamed('/notifics'),
+              ),
+            );
+          }),
           const SizedBox(width: 10),
           GestureDetector(
             onTap: () => Get.toNamed('/account'),
@@ -131,14 +156,17 @@ class MyMenuView extends GetView<MymenuController> {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   itemBuilder: (_, i) {
                     final m = c.recommendedMenus[i];
+                    final image = (m['image'] ?? '').toString();
+                    final imagePath = image.isNotEmpty
+                        ? 'http://127.0.0.1:8000/storage/$image'
+                        : 'assets/images/coffee.png';
+
                     return productHorizontalCard(
                       data: m,
                       title: m['name'] ?? '',
                       subtitle: m['description'] ?? '',
                       price: 'Rp ${m['price']}',
-                      imageUrl: (m['image'] ?? '').toString().isNotEmpty
-                          ? 'http://127.0.0.1:8000/storage/${m['image']}'
-                          : 'assets/images/coffee.png',
+                      imageUrl: imagePath,
                       onTap: () => _openDetail(m),
                     );
                   },
@@ -171,15 +199,21 @@ class MyMenuView extends GetView<MymenuController> {
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18)),
                       ),
-                      ...e.value.map((m) => productCard(
+                      ...e.value.map((m) {
+                        final image = (m['image'] ?? '').toString();
+                        final imagePath = image.isNotEmpty
+                            ? 'http://127.0.0.1:8000/storage/$image'
+                            : 'assets/images/coffee.png';
+
+                        return productCard(
                           data: m,
                           title: m['name'] ?? '',
                           subtitle: m['description'] ?? '',
-                          imageUrl: (m['image'] ?? '').toString().isNotEmpty
-                              ? 'http://127.0.0.1:8000/storage/${m['image']}'
-                              : '',
+                          imageUrl: imagePath,
                           price: 'Rp ${m['price']}',
-                          onTap: () => _openDetail(m))),
+                          onTap: () => _openDetail(m),
+                        );
+                      }),
                     ],
                   );
                 }).toList(),

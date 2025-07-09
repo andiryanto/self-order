@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:self_order/app/routes/app_pages.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentView extends StatelessWidget {
@@ -11,14 +12,33 @@ class PaymentView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment'),
+        centerTitle: true,
+        title: const Text(
+          'Payment',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
       body: WebViewWidget(
         controller: WebViewController()
           ..loadRequest(Uri.parse(redirectUrl))
-          ..setJavaScriptMode(JavaScriptMode.unrestricted),
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..setNavigationDelegate(
+            NavigationDelegate(
+              onPageStarted: (url) {
+                if (url.contains('/payment/success')) {
+                  Get.offAllNamed(Routes.HOME_MAIN);
+                  Get.snackbar(
+                    'Sukses',
+                    'Pembayaran berhasil dilakukan!',
+                    snackPosition: SnackPosition.TOP,
+                    duration: Duration(seconds: 2),
+                  );
+                }
+              },
+            ),
+          ),
       ),
     );
   }

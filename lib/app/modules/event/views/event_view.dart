@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/event_controller.dart';
+import 'package:self_order/app/modules/notifics/controllers/notifics_controller.dart';
+import 'package:badges/badges.dart' as badges;
 
 const String _baseUrl = 'http://127.0.0.1:8000';
 
@@ -14,7 +16,7 @@ class EventView extends GetView<EventController> {
       borderSide: const BorderSide(color: Colors.black),
       borderRadius: BorderRadius.circular(12),
     );
-
+    final notificsController = Get.put(NotificsController());
     return GetBuilder<EventController>(
       init: EventController(),
       builder: (controller) {
@@ -33,10 +35,26 @@ class EventView extends GetView<EventController> {
                   ),
                 )),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.notifications_none, color: Colors.black),
-                onPressed: () => Get.toNamed('/notifics'),
-              ),
+              Obx(() {
+                final count = notificsController.notifications.length;
+                return badges.Badge(
+                  showBadge: count > 0,
+                  badgeContent: Text(
+                    '$count',
+                    style: const TextStyle(color: Colors.white, fontSize: 10),
+                  ),
+                  position: badges.BadgePosition.topEnd(top: 0, end: 3),
+                  badgeStyle: const badges.BadgeStyle(
+                    badgeColor: Colors.red,
+                    padding: EdgeInsets.all(5),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.notifications_none,
+                        color: Colors.black),
+                    onPressed: () => Get.toNamed('/notifics'),
+                  ),
+                );
+              }),
               const SizedBox(width: 10),
               GestureDetector(
                 onTap: () => Get.toNamed("/account"),

@@ -140,6 +140,21 @@ class ShopView extends GetView<ShopController> {
                                   style: const TextStyle(
                                       fontSize: 12, color: Colors.grey),
                                 ),
+                                if (item.extras.isNotEmpty)
+                                  Text(
+                                    'Topping: ${item.extras.join(', ')}',
+                                    style: const TextStyle(
+                                        fontSize: 12, color: Colors.black54),
+                                  ),
+                                if (item.note.isNotEmpty)
+                                  Text(
+                                    'Catatan: ${item.note}',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black45,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
                                 const SizedBox(height: 6),
                                 Text(fmt.format(item.price)),
                               ],

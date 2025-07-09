@@ -7,7 +7,7 @@ class HomeController extends GetxController {
   var username = 'User'.obs;
   var queueNumber = 0.obs;
   var feedbacks = <Map<String, dynamic>>[].obs;
-  var promos = <Map<String, dynamic>>[].obs; // ✅ tambahkan list promo
+  var promos = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() {
@@ -15,7 +15,7 @@ class HomeController extends GetxController {
     fetchUserData();
     fetchQueueNumber();
     fetchFeedbacks();
-    fetchPromos(); // ✅ panggil di sini
+    fetchPromos();
   }
 
   void fetchUserData() {
@@ -23,8 +23,22 @@ class HomeController extends GetxController {
     username.value = box.read('username') ?? 'User';
   }
 
-  void fetchQueueNumber() {
-    queueNumber.value = 50; // Bisa disambung ke API kalau perlu
+  Future<void> fetchQueueNumber() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://127.0.0.1:8000/api/antrian'),
+        headers: {'Accept': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        queueNumber.value = data['queue_number'] ?? 0;
+      } else {
+        Get.snackbar('Gagal', 'Gagal mengambil data antrian');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Terjadi kesalahan: $e');
+    }
   }
 
   Future<void> fetchFeedbacks() async {
@@ -45,7 +59,6 @@ class HomeController extends GetxController {
     }
   }
 
-  // ✅ Fungsi baru untuk ambil data promo dari API
   Future<void> fetchPromos() async {
     try {
       final response = await http.get(

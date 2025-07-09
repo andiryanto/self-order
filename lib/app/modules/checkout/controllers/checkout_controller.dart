@@ -16,29 +16,35 @@ class CheckoutController extends GetxController {
         'price': item.price,
         'qty': item.qty,
         'note': item.note,
+        'extras': item.extras,
       };
     }).toList();
 
-    final url = Uri.parse(
-        "http://127.0.0.1:8000/api/checkout"); // Ganti IP sesuai backend-mu
+    // ✅ Simpan ke variabel body dulu
+    final body = {
+      'gross_amount': subtotal,
+      'name': 'Daffa', // nanti bisa pakai dari user login
+      'email': 'daffa@example.com',
+      'items': items,
+    };
+
+    // ✅ Cetak JSON-nya dulu ke console (untuk dicek)
+    print(jsonEncode(body));
+
+    final url = Uri.parse("http://127.0.0.1:8000/api/checkout");
 
     try {
       final res = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'gross_amount': subtotal,
-          'name': 'Daffa', // nanti bisa diganti dengan user login
-          'email': 'daffa@example.com',
-          'items': items,
-        }),
+        body: jsonEncode(body), // Kirim body-nya di sini
       );
 
       final data = jsonDecode(res.body);
 
       if (res.statusCode == 200 && data['redirect_url'] != null) {
-        // ✅ Redirect ke halaman payment
-        Get.toNamed('/payment', arguments: {
+        shopC.items.clear();
+        Get.offNamed('/payment', arguments: {
           'redirect_url': data['redirect_url'],
         });
       } else {

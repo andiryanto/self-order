@@ -3,12 +3,15 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../controllers/about_controller.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:self_order/app/modules/notifics/controllers/notifics_controller.dart';
 
 class AboutView extends GetView<AboutController> {
   const AboutView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final notificsController = Get.put(NotificsController());
     return GetBuilder<AboutController>(
       init: AboutController(),
       builder: (controller) {
@@ -26,10 +29,26 @@ class AboutView extends GetView<AboutController> {
                       fontSize: 18),
                 )),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.notifications_none, color: Colors.black),
-                onPressed: () => Get.toNamed('/notifics'),
-              ),
+              Obx(() {
+                final count = notificsController.notifications.length;
+                return badges.Badge(
+                  showBadge: count > 0,
+                  badgeContent: Text(
+                    '$count',
+                    style: const TextStyle(color: Colors.white, fontSize: 10),
+                  ),
+                  position: badges.BadgePosition.topEnd(top: 0, end: 3),
+                  badgeStyle: const badges.BadgeStyle(
+                    badgeColor: Colors.red,
+                    padding: EdgeInsets.all(5),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.notifications_none,
+                        color: Colors.black),
+                    onPressed: () => Get.toNamed('/notifics'),
+                  ),
+                );
+              }),
               const SizedBox(width: 10),
               GestureDetector(
                 onTap: () => Get.toNamed('/account'),

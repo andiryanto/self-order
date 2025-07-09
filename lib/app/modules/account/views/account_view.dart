@@ -6,6 +6,7 @@ import '../controllers/account_controller.dart';
 import '../../help_center/views/help_center_view.dart';
 import '../../terms/views/terms_view.dart';
 import '../../privacy_policy/views/privacy_policy_view.dart';
+import '../../history_transaction/views/history_transaction_view.dart';
 
 class AccountView extends GetView<AccountController> {
   const AccountView({super.key});
@@ -80,6 +81,9 @@ class AccountView extends GetView<AccountController> {
               const SizedBox(height: 16),
 
               // Menu List
+              _buildListTile('History Transaction',
+                  icon: Icons.history,
+                  onTap: () => Get.toNamed('/history-transaction')),
               _buildListTile('Help Center',
                   onTap: () => Get.to(() => const HelpCenterView())),
               _buildListTile('Terms & Conditions',

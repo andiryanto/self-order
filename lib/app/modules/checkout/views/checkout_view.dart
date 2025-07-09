@@ -71,14 +71,25 @@ class CheckoutView extends GetView<CheckoutController> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Image.asset(
-                                        item.image,
-                                        width: 50,
-                                        height: 50,
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (_, __, ___) =>
-                                            const Icon(Icons.broken_image),
-                                      ),
+                                      item.image.startsWith('http')
+                                          ? Image.network(
+                                              item.image,
+                                              width: 50,
+                                              height: 50,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (_, __, ___) =>
+                                                  const Icon(
+                                                      Icons.broken_image),
+                                            )
+                                          : Image.asset(
+                                              item.image,
+                                              width: 50,
+                                              height: 50,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (_, __, ___) =>
+                                                  const Icon(
+                                                      Icons.broken_image),
+                                            ),
                                       const SizedBox(width: 12),
                                       Expanded(
                                         child: Column(

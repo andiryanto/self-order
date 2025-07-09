@@ -18,10 +18,9 @@ class MymenuController extends GetxController {
   var recommendedMenus = <Map<String, dynamic>>[].obs;
 
   // Filter
-  var selectedCategory = ''.obs; // '' artinya semua
+  var selectedCategory = ''.obs;
   var searchQuery = ''.obs;
 
-  // Filtered output
   List<Map<String, dynamic>> get filteredMenus {
     final query = searchQuery.value.toLowerCase();
     final category = selectedCategory.value.toLowerCase();
@@ -29,11 +28,8 @@ class MymenuController extends GetxController {
     return menus.where((item) {
       final name = item['name']?.toString().toLowerCase() ?? '';
       final itemCategory = item['category']?.toString().toLowerCase() ?? '';
-
-      final matchQuery = query.isEmpty || name.contains(query);
-      final matchCategory = category.isEmpty || itemCategory == category;
-
-      return matchQuery && matchCategory;
+      return (query.isEmpty || name.contains(query)) &&
+          (category.isEmpty || itemCategory == category);
     }).toList();
   }
 
@@ -42,10 +38,7 @@ class MymenuController extends GetxController {
     super.onInit();
     fetchMenus();
     fetchRecommendedMenus();
-
-    // Set default orderType ke ShopController saat awal
-    final shopC = Get.find<ShopController>();
-    shopC.orderType.value = selectedOrderType.value;
+    Get.find<ShopController>().orderType.value = selectedOrderType.value;
   }
 
   void fetchMenus() async {
@@ -53,11 +46,9 @@ class MymenuController extends GetxController {
       isLoading(true);
       final response =
           await http.get(Uri.parse('http://127.0.0.1:8000/api/menus'));
-
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         menus.value = List<Map<String, dynamic>>.from(jsonData['data']);
-        print('Menu loaded: ${menus.length}');
       } else {
         Get.snackbar('Gagal', 'Gagal mengambil data menu');
         menus.clear();
@@ -74,14 +65,12 @@ class MymenuController extends GetxController {
     try {
       final response = await http
           .get(Uri.parse('http://127.0.0.1:8000/api/menus/recommended'));
-
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         recommendedMenus.value =
             List<Map<String, dynamic>>.from(jsonData['data']);
-        print('Recommended menus loaded: ${recommendedMenus.length}');
       } else {
-        Get.snackbar('Gagal', 'Gagal mengambil data rekomendasi menu');
+        Get.snackbar('Gagal', 'Gagal mengambil data rekomendasi');
         recommendedMenus.clear();
       }
     } catch (e) {
@@ -92,9 +81,6 @@ class MymenuController extends GetxController {
 
   void updateOrderType(String value) {
     selectedOrderType.value = value;
-
-    // Sinkronkan ke ShopController juga
-    final shopC = Get.find<ShopController>();
-    shopC.orderType.value = value;
+    Get.find<ShopController>().orderType.value = value;
   }
 }

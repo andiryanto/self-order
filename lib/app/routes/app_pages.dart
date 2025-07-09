@@ -18,6 +18,8 @@ import '../modules/forgot_password/bindings/forgot_password_binding.dart';
 import '../modules/forgot_password/views/forgot_password_view.dart';
 import '../modules/help_center/bindings/help_center_binding.dart';
 import '../modules/help_center/views/help_center_view.dart';
+import '../modules/history_transaction/bindings/history_transaction_binding.dart';
+import '../modules/history_transaction/views/history_transaction_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/home_main/bindings/home_main_binding.dart';
@@ -154,6 +156,11 @@ class AppPages {
       name: _Paths.PAYMENT,
       page: () => PaymentView(),
       binding: PaymentBinding(),
+    ),
+    GetPage(
+      name: _Paths.HISTORY_TRANSACTION,
+      page: () => const HistoryTransactionView(),
+      binding: HistoryTransactionBinding(),
     ),
   ];
 }

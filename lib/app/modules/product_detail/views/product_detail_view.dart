@@ -67,37 +67,39 @@ class ProductDetailView extends GetView<ProductDetailController> {
                     const SizedBox(height: 24),
 
                     /* ---- EXTRA ---- */
-                    const Text('Extra',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 8),
-                    Obx(() => Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: c.extras.keys.map((e) {
-                            final selected = c.selectedExtras.contains(e);
-                            return ChoiceChip(
-                              label: Text('$e - ${fmt.format(c.extras[e])}',
-                                  textAlign: TextAlign.center),
-                              selected: selected,
-                              selectedColor: Colors.black,
-                              backgroundColor: Colors.white,
-                              checkmarkColor:
-                                  selected ? Colors.white : Colors.black,
-                              labelStyle: TextStyle(
-                                  color:
-                                      selected ? Colors.white : Colors.black),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                side: BorderSide(
-                                    color: selected
-                                        ? Colors.black
-                                        : Colors.grey.shade400),
-                              ),
-                              onSelected: (_) => c.toggleExtra(e),
-                            );
-                          }).toList(),
-                        )),
-                    const SizedBox(height: 24),
+                    if (c.extras.isNotEmpty) ...[
+                      const Text('Extra',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      Obx(() => Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: c.extras.keys.map((e) {
+                              final selected = c.selectedExtras.contains(e);
+                              return ChoiceChip(
+                                label: Text('$e - ${fmt.format(c.extras[e])}',
+                                    textAlign: TextAlign.center),
+                                selected: selected,
+                                selectedColor: Colors.black,
+                                backgroundColor: Colors.white,
+                                checkmarkColor:
+                                    selected ? Colors.white : Colors.black,
+                                labelStyle: TextStyle(
+                                    color:
+                                        selected ? Colors.white : Colors.black),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  side: BorderSide(
+                                      color: selected
+                                          ? Colors.black
+                                          : Colors.grey.shade400),
+                                ),
+                                onSelected: (_) => c.toggleExtra(e),
+                              );
+                            }).toList(),
+                          )),
+                      const SizedBox(height: 24),
+                    ],
 
                     /* ---- CATATAN ---- */
                     const Text('Catatan',
@@ -106,7 +108,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
                     TextField(
                       cursorColor: Colors.black,
                       maxLines: 2,
-                      onChanged: c.setNote, // ← sekarang ada
+                      onChanged: c.setNote,
                       decoration: InputDecoration(
                         hintText: 'Tambah catatan',
                         hintStyle:

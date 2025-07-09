@@ -27,6 +27,7 @@ abstract class Routes {
   static const CHECKOUT = _Paths.CHECKOUT;
   static const ALL_PROMO = _Paths.ALL_PROMO;
   static const PAYMENT = _Paths.PAYMENT;
+  static const HISTORY_TRANSACTION = _Paths.HISTORY_TRANSACTION;
 }
 
 abstract class _Paths {
@@ -55,4 +56,5 @@ abstract class _Paths {
   static const CHECKOUT = '/checkout';
   static const ALL_PROMO = '/all-promo';
   static const PAYMENT = '/payment';
+  static const HISTORY_TRANSACTION = '/history-transaction';
 }
