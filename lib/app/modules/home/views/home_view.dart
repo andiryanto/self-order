@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 import 'package:self_order/app/modules/home_main/controllers/home_main_controller.dart';
 import 'package:self_order/app/modules/mymenu/controllers/mymenu_controller.dart';
+import 'package:self_order/app/modules/notifics/controllers/notifics_controller.dart';
+import 'package:badges/badges.dart' as badges;
+
+const String _baseUrl = 'http://127.0.0.1:8000';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -10,6 +14,8 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => MymenuController(), fenix: true);
+    final notificsController =
+        Get.put(NotificsController()); // Tambahan badge controller
 
     return GetBuilder<HomeController>(
       init: HomeController(),
@@ -29,10 +35,26 @@ class HomeView extends GetView<HomeController> {
                   ),
                 )),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.notifications_none, color: Colors.black),
-                onPressed: () => Get.toNamed('/notifics'),
-              ),
+              Obx(() {
+                final count = notificsController.notifications.length;
+                return badges.Badge(
+                  showBadge: count > 0,
+                  badgeContent: Text(
+                    '$count',
+                    style: const TextStyle(color: Colors.white, fontSize: 10),
+                  ),
+                  position: badges.BadgePosition.topEnd(top: 0, end: 3),
+                  badgeStyle: const badges.BadgeStyle(
+                    badgeColor: Colors.red,
+                    padding: EdgeInsets.all(5),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.notifications_none,
+                        color: Colors.black),
+                    onPressed: () => Get.toNamed('/notifics'),
+                  ),
+                );
+              }),
               const SizedBox(width: 10),
               GestureDetector(
                 onTap: () => Get.toNamed("/account"),
@@ -187,7 +209,7 @@ class HomeView extends GetView<HomeController> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: Image.network(
-                              promo['image'] ?? '',
+                              '$_baseUrl/storage/${promo['promo_image']}',
                               fit: BoxFit.cover,
                               errorBuilder: (_, __, ___) =>
                                   const Center(child: Icon(Icons.broken_image)),
@@ -202,9 +224,10 @@ class HomeView extends GetView<HomeController> {
                 const SizedBox(height: 20),
 
                 // ANTRIAN
-                const Text('Antrian!',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
+                const Text(
+                  'Antrian!',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                ),
                 const SizedBox(height: 10),
                 Container(
                   width: double.infinity,
@@ -213,15 +236,17 @@ class HomeView extends GetView<HomeController> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 4)
+                      BoxShadow(color: Colors.black12, blurRadius: 4),
                     ],
                   ),
                   child: Obx(() => Column(
                         children: [
                           const Text('Nomor antrian saat ini:'),
-                          Text('${controller.queueNumber.value}',
-                              style: const TextStyle(
-                                  fontSize: 60, fontWeight: FontWeight.bold)),
+                          Text(
+                            '${controller.queueNumber.value}',
+                            style: const TextStyle(
+                                fontSize: 60, fontWeight: FontWeight.bold),
+                          ),
                         ],
                       )),
                 ),
@@ -247,6 +272,7 @@ class HomeView extends GetView<HomeController> {
                 const SizedBox(height: 10),
                 Obx(() => Column(
                       children: controller.feedbacks
+                          .take(3)
                           .map(
                             (feedback) => Container(
                               margin: const EdgeInsets.only(bottom: 10),
@@ -256,7 +282,7 @@ class HomeView extends GetView<HomeController> {
                                 borderRadius: BorderRadius.circular(10),
                                 boxShadow: const [
                                   BoxShadow(
-                                      color: Colors.black12, blurRadius: 4)
+                                      color: Colors.black12, blurRadius: 4),
                                 ],
                               ),
                               child: Column(

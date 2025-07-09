@@ -42,10 +42,15 @@ class AccountView extends GetView<AccountController> {
                     padding: const EdgeInsets.all(12),
                     child: Row(
                       children: [
-                        const CircleAvatar(
-                          backgroundImage: AssetImage('assets/images/RYN.jpg'),
-                          radius: 24,
-                        ),
+                        Obx(() => CircleAvatar(
+                              backgroundImage: controller
+                                      .userImage.value.isNotEmpty
+                                  ? NetworkImage(controller.userImage.value)
+                                  : const AssetImage(
+                                          'assets/images/default_profile.jpg')
+                                      as ImageProvider,
+                              radius: 24,
+                            )),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(

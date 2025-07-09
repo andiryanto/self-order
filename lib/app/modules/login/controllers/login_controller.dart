@@ -16,7 +16,7 @@ class LoginController extends GetxController {
 
   /* ---------- Storage & Base URL ---------- */
   final box = GetStorage();
-  final baseUrl = 'http://127.0.0.1:8000'; // ganti sesuai lingkungan
+  final baseUrl = 'http://127.0.0.1:8000'; // ganti ke IP/URL backend kamu
 
   /* ---------- Toggle password visibility ---------- */
   void togglePasswordVisibility() => obscurePassword.toggle();
@@ -42,10 +42,13 @@ class LoginController extends GetxController {
       final data = json.decode(res.body);
 
       if (res.statusCode == 200 && data['token'] != null) {
-        // simpan token & user
+        // ✅ Simpan token & data user
         await box.write('token', data['token']);
         await box.write('username', data['user']['name']);
         await box.write('phone', data['user']['phone']);
+        await box.write('image_url', data['user']['image_url'] ?? '');
+
+        // ✅ Navigasi ke home
         Get.offAllNamed(Routes.HOME_MAIN);
         Get.snackbar('Sukses', 'Login berhasil',
             backgroundColor: Colors.green, colorText: Colors.white);

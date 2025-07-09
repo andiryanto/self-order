@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 class AccountController extends GetxController {
   var userName = 'User'.obs;
   var userPhone = ''.obs;
+  var userImage = ''.obs;
 
-  // ✅ Feedback controller sebagai objek tetap
   late TextEditingController feedbackController;
   var isLoading = false.obs;
 
@@ -15,7 +15,7 @@ class AccountController extends GetxController {
   void onInit() {
     super.onInit();
     feedbackController = TextEditingController();
-    fetchUserData();
+    fetchUserData(); // load user data saat controller dibuat
   }
 
   @override
@@ -28,13 +28,15 @@ class AccountController extends GetxController {
     final box = GetStorage();
     userName.value = box.read('username') ?? 'User';
     userPhone.value = box.read('phone') ?? '';
+    userImage.value = box.read('image_url') ?? ''; // 🔥 load URL foto
   }
 
   void logout() {
     final box = GetStorage();
-    box.erase();
+    box.erase(); // hapus semua data user
     userName.value = '';
     userPhone.value = '';
+    userImage.value = '';
     Get.offAllNamed('/login');
   }
 
@@ -52,14 +54,10 @@ class AccountController extends GetxController {
     try {
       final response = await http.post(
         Uri.parse('http://127.0.0.1:8000/api/feedback'),
-        headers: {
-          'Accept': 'application/json',
-        },
+        headers: {'Accept': 'application/json'},
         body: {'message': message, 'username': username},
       );
 
-      print('Status: ${response.statusCode}');
-      print('Body: ${response.body}');
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.snackbar('Sukses', 'Feedback berhasil dikirim');
         feedbackController.clear();

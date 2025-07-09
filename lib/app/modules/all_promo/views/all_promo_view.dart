@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/all_promo_controller.dart';
 
+const String _baseUrl = 'http://127.0.0.1:8000';
+
 class AllPromoView extends GetView<AllPromoController> {
   const AllPromoView({super.key});
 
@@ -52,13 +54,14 @@ class AllPromoView extends GetView<AllPromoController> {
           // Gambar promo
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.network(
-              'http://127.0.0.1:8000/storage/${promo['image']}',
-              width: double.infinity,
-              height: 180,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Icons.broken_image),
+            child: AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Image.network(
+                '$_baseUrl/storage/${promo['promo_image']}',
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) =>
+                    const Center(child: Icon(Icons.broken_image)),
+              ),
             ),
           ),
           // Informasi promo
@@ -69,7 +72,7 @@ class AllPromoView extends GetView<AllPromoController> {
               children: [
                 // Teks judul promo tetap kiri
                 Text(
-                  promo['title'] ?? '',
+                  promo['name'] ?? '',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -79,7 +82,7 @@ class AllPromoView extends GetView<AllPromoController> {
                 Text(promo['description'] ?? ''),
                 const SizedBox(height: 8),
                 Text(
-                  'Periode: ${promo['start_date']} - ${promo['end_date']}',
+                  'Periode: ${promo['start_date']} - ${promo['expiried_date']}',
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
