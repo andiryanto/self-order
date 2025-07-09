@@ -1,21 +1,52 @@
-// lib/app/modules/checkout/controllers/checkout_controller.dart
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import '../../shop/controllers/shop_controller.dart';
 
 class CheckoutController extends GetxController {
-  /// Mengakses ShopController global
   final ShopController shopC = Get.find<ShopController>();
 
-  /// Getter subtotal (total harga semua item)
   int get subtotal => shopC.subtotal;
 
-  /// Fungsi lanjut ke pembayaran (sementara masih dummy)
-  void toPayment() {
-    Get.snackbar(
-      'Checkout',
-      'Fitur pembayaran belum tersedia.',
-      snackPosition: SnackPosition.BOTTOM,
-      duration: const Duration(seconds: 2),
-    );
+  void toPayment() async {
+    final items = shopC.items.map((item) {
+      return {
+        'name': item.name,
+        'price': item.price,
+        'qty': item.qty,
+        'note': item.note,
+      };
+    }).toList();
+
+    final url = Uri.parse(
+        "http://127.0.0.1:8000/api/checkout"); // Ganti IP sesuai backend-mu
+
+    try {
+      final res = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'gross_amount': subtotal,
+          'name': 'Daffa', // nanti bisa diganti dengan user login
+          'email': 'daffa@example.com',
+          'items': items,
+        }),
+      );
+
+      final data = jsonDecode(res.body);
+
+      if (res.statusCode == 200 && data['redirect_url'] != null) {
+        // ✅ Redirect ke halaman payment
+        Get.toNamed('/payment', arguments: {
+          'redirect_url': data['redirect_url'],
+        });
+      } else {
+        Get.snackbar("Error",
+            "Gagal membuat transaksi: ${data['error'] ?? 'Unknown error'}");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Terjadi kesalahan: $e");
+    }
   }
 }

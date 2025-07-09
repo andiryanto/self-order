@@ -30,6 +30,8 @@ import '../modules/notifics/bindings/notifics_binding.dart';
 import '../modules/notifics/views/notifics_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
+import '../modules/payment/bindings/payment_binding.dart';
+import '../modules/payment/views/payment_view.dart';
 import '../modules/privacy_policy/bindings/privacy_policy_binding.dart';
 import '../modules/privacy_policy/views/privacy_policy_view.dart';
 import '../modules/product_detail/bindings/product_detail_binding.dart';
@@ -147,6 +149,11 @@ class AppPages {
       name: _Paths.ALL_PROMO,
       page: () => const AllPromoView(),
       binding: AllPromoBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT,
+      page: () => PaymentView(),
+      binding: PaymentBinding(),
     ),
   ];
 }
