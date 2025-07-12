@@ -1,4 +1,3 @@
-// event_view.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/event_controller.dart';
@@ -17,6 +16,7 @@ class EventView extends GetView<EventController> {
       borderRadius: BorderRadius.circular(12),
     );
     final notificsController = Get.put(NotificsController());
+
     return GetBuilder<EventController>(
       init: EventController(),
       builder: (controller) {
@@ -27,7 +27,7 @@ class EventView extends GetView<EventController> {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Obx(() => Text(
-                  'Halo, ${controller.username.value}',
+                  'Halo, ${controller.username.value.isEmpty ? 'User' : controller.username.value}',
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -59,8 +59,9 @@ class EventView extends GetView<EventController> {
               GestureDetector(
                 onTap: () => Get.toNamed("/account"),
                 child: CircleAvatar(
+                  radius: 20,
                   backgroundColor: Colors.grey[300],
-                  child: const Icon(Icons.person, color: Colors.black),
+                  child: const Icon(Icons.person, color: Colors.white),
                 ),
               ),
               const SizedBox(width: 10),
@@ -180,86 +181,109 @@ class EventView extends GetView<EventController> {
                 ),
                 const SizedBox(height: 16),
                 Expanded(
-                  child: Obx(() => ListView.builder(
-                        itemCount: controller.filteredEvents.length,
-                        itemBuilder: (context, index) {
-                          final event = controller.filteredEvents[index];
-                          final imageUrl = (event['image'] != null &&
-                                  event['image'].toString().isNotEmpty)
-                              ? '$_baseUrl/storage/${event['image']}'
-                              : 'assets/images/default_event.png';
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 16),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black12),
-                              borderRadius: BorderRadius.circular(12),
+                    final list = controller.filteredEvents;
+
+                    if (list.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            SizedBox(height: 12),
+                            Text(
+                              'Event tidak ditemukan',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.grey),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(12),
-                                    topRight: Radius.circular(12),
-                                  ),
-                                  child: Image.network(
-                                    imageUrl,
-                                    width: double.infinity,
+                          ],
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (context, index) {
+                        final event = list[index];
+                        final imageUrl = (event['image'] != null &&
+                                event['image'].toString().isNotEmpty)
+                            ? '$_baseUrl/storage/${event['image']}'
+                            : 'assets/images/default_event.png';
+
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 16),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(12),
+                                  topRight: Radius.circular(12),
+                                ),
+                                child: Image.network(
+                                  imageUrl,
+                                  width: double.infinity,
+                                  height: 180,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Image.asset(
+                                    'assets/images/default_event.png',
                                     height: 180,
                                     fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => Image.asset(
-                                      'assets/images/default_event.png',
-                                      height: 180,
-                                      fit: BoxFit.cover,
-                                    ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        event['name'] ?? '',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      event['name'] ?? '',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      const SizedBox(height: 4),
-                                      if ((event['description'] ?? '')
-                                          .toString()
-                                          .isNotEmpty)
-                                        Text(
-                                          event['description'],
-                                          maxLines: 3, // batasi 3 baris
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                              color: Colors.black87,
-                                              fontSize: 13),
-                                        ),
-                                      const SizedBox(height: 4),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    if ((event['description'] ?? '')
+                                        .toString()
+                                        .isNotEmpty)
                                       Text(
-                                        event['date'] ?? '',
+                                        event['description'],
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
                                         style: const TextStyle(
-                                            color: Colors.black87),
+                                            color: Colors.black87,
+                                            fontSize: 13),
                                       ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        'Kategori: ${event['category'] ?? ''}',
-                                        style: const TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                            color: Colors.black54),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      )),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      event['date'] ?? '',
+                                      style: const TextStyle(
+                                          color: Colors.black87),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Kategori: ${event['category'] ?? ''}',
+                                      style: const TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          color: Colors.black54),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }),
                 )
               ],
             ),

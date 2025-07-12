@@ -13,7 +13,10 @@ class AccountDetailView extends GetView<AccountDetailController> {
       appBar: AppBar(
         leading: const BackButton(color: Colors.black),
         title: const Text('My Account',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 18)),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,

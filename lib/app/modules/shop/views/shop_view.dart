@@ -216,7 +216,18 @@ class ShopView extends GetView<ShopController> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(6)),
                       ),
-                      onPressed: () => Get.toNamed(Routes.CHECKOUT),
+                      onPressed: () {
+                        if (controller.items.isEmpty) {
+                          Get.snackbar(
+                            'Keranjang Kosong',
+                            'Silakan tambahkan item terlebih dahulu sebelum checkout.',
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                        } else {
+                          Get.toNamed(Routes.CHECKOUT);
+                        }
+                      },
                       child: const Text('Checkout'),
                     ),
                   ],

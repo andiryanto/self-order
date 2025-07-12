@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class AccountController extends GetxController {
-  var userName = 'User'.obs;
+  var userName = ''.obs;
   var userPhone = ''.obs;
   var userImage = ''.obs;
 
@@ -28,7 +28,9 @@ class AccountController extends GetxController {
     final box = GetStorage();
     userName.value = box.read('username') ?? 'User';
     userPhone.value = box.read('phone') ?? '';
-    userImage.value = box.read('image_url') ?? ''; // 🔥 load URL foto
+    userImage.value = box.read('image') ?? '';
+    print('DEBUG image_url: ${userImage.value}');
+    // 🔥 load URL foto
   }
 
   void logout() {
@@ -37,6 +39,15 @@ class AccountController extends GetxController {
     userName.value = '';
     userPhone.value = '';
     userImage.value = '';
+
+    Get.snackbar(
+      'Keluar',
+      'Anda telah berhasil logout',
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+
     Get.offAllNamed('/login');
   }
 

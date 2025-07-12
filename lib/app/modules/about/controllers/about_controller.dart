@@ -2,15 +2,18 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AboutController extends GetxController {
-  var username = 'Ryan'.obs;
+  var username = ''.obs;
   var crewList = <Map<String, dynamic>>[].obs;
   var isLoading = false.obs;
 
   @override
   void onInit() {
     super.onInit();
+    final box = GetStorage();
+    username.value = box.read('username') ?? '';
     fetchCrew();
   }
 

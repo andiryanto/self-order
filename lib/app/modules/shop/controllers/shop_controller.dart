@@ -26,6 +26,8 @@ class ShopController extends GetxController {
 
   String priceLabel(int price) => _fmt.format(price);
 
+  bool get isEmpty => items.isEmpty;
+
   // ===== ACTIONS =====
   void add(ShopItemModel item) {
     final idx = items.indexWhere((e) => e.name == item.name);

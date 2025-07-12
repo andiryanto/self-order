@@ -16,11 +16,19 @@ class HomeController extends GetxController {
     fetchQueueNumber();
     fetchFeedbacks();
     fetchPromos();
+    fetchUserImage();
   }
 
   void fetchUserData() {
     final box = GetStorage();
     username.value = box.read('username') ?? 'User';
+  }
+
+  final userImage = ''.obs;
+
+  void fetchUserImage() {
+    final box = GetStorage();
+    userImage.value = box.read('image') ?? '';
   }
 
   Future<void> fetchQueueNumber() async {

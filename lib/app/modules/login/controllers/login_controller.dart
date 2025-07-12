@@ -6,22 +6,17 @@ import 'package:http/http.dart' as http;
 import 'package:get_storage/get_storage.dart';
 
 class LoginController extends GetxController {
-  /* ---------- Form Controller ---------- */
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
 
-  /* ---------- UI State ---------- */
   final obscurePassword = true.obs;
   final isLoading = false.obs;
 
-  /* ---------- Storage & Base URL ---------- */
   final box = GetStorage();
-  final baseUrl = 'http://127.0.0.1:8000'; // ganti ke IP/URL backend kamu
+  final baseUrl = 'http://127.0.0.1:8000';
 
-  /* ---------- Toggle password visibility ---------- */
   void togglePasswordVisibility() => obscurePassword.toggle();
 
-  /* ---------- LOGIN ACTION ---------- */
   Future<void> login() async {
     final phone = phoneController.text.trim();
     final password = passwordController.text.trim();
@@ -39,32 +34,51 @@ class LoginController extends GetxController {
         body: {'phone': phone, 'password': password},
       );
 
-      final data = json.decode(res.body);
+      print('STATUS CODE: ${res.statusCode}');
+      print('RESPONSE BODY: ${res.body}');
+      print('RESPONSE HEADERS: ${res.headers}');
 
-      if (res.statusCode == 200 && data['token'] != null) {
-        // ✅ Simpan token & data user
-        await box.write('token', data['token']);
-        await box.write('username', data['user']['name']);
-        await box.write('phone', data['user']['phone']);
-        await box.write('image_url', data['user']['image_url'] ?? '');
+      final contentType = res.headers['content-type'] ?? '';
 
-        // ✅ Navigasi ke home
-        Get.offAllNamed(Routes.HOME_MAIN);
-        Get.snackbar('Sukses', 'Login berhasil',
-            backgroundColor: Colors.green, colorText: Colors.white);
+      if (contentType.contains('application/json')) {
+        final data = json.decode(res.body);
+
+        if (res.statusCode == 200 && data['token'] != null) {
+          // ✅ Login berhasil
+          await box.write('token', data['token']);
+          await box.write('username', data['user']['name']);
+          await box.write('phone', data['user']['phone']);
+          await box.write('image', data['user']['profile_photo_url'] ?? '');
+
+          Get.offAllNamed(Routes.HOME_MAIN);
+          Get.snackbar('Sukses', 'Login berhasil',
+              duration: Duration(seconds: 3),
+              backgroundColor: Colors.green,
+              colorText: Colors.white);
+        } else {
+          // ❌ Login gagal
+          final errorMsg = data['message'] ??
+              (res.statusCode == 401
+                  ? 'Nomor HP atau password salah'
+                  : 'Login gagal');
+          Get.snackbar('Gagal', errorMsg,
+              backgroundColor: Colors.red, colorText: Colors.white);
+        }
       } else {
-        Get.snackbar('Gagal', data['message'] ?? 'Login gagal',
+        // 🔴 Server kirim selain JSON
+        Get.snackbar('Error',
+            'Server tidak mengirimkan data JSON\nCode: ${res.statusCode}',
             backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
-      Get.snackbar('Error', e.toString(),
+      print("Login error: $e");
+      Get.snackbar('Error', 'Terjadi kesalahan saat login\n${e.toString()}',
           backgroundColor: Colors.red, colorText: Colors.white);
     } finally {
       isLoading(false);
     }
   }
 
-  /* ---------- Cleanup ---------- */
   @override
   void onClose() {
     phoneController.dispose();

@@ -22,7 +22,7 @@ class AboutView extends GetView<AboutController> {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Obx(() => Text(
-                  'Halo, ${controller.username.value}',
+                  'Halo, ${controller.username.value.isEmpty ? 'User' : controller.username.value}',
                   style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -51,12 +51,12 @@ class AboutView extends GetView<AboutController> {
               }),
               const SizedBox(width: 10),
               GestureDetector(
-                onTap: () => Get.toNamed('/account'),
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey[300],
-                  child: const Icon(Icons.person, color: Colors.black),
-                ),
-              ),
+                  onTap: () => Get.toNamed('/account'),
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.grey[300],
+                    child: const Icon(Icons.person, color: Colors.white),
+                  )),
               const SizedBox(width: 10),
             ],
           ),

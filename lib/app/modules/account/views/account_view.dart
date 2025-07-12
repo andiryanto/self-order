@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -34,7 +35,6 @@ class AccountView extends GetView<AccountController> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // Profile Card
               Obx(() => Container(
                     decoration: BoxDecoration(
                       color: Colors.black,
@@ -43,15 +43,11 @@ class AccountView extends GetView<AccountController> {
                     padding: const EdgeInsets.all(12),
                     child: Row(
                       children: [
-                        Obx(() => CircleAvatar(
-                              backgroundImage: controller
-                                      .userImage.value.isNotEmpty
-                                  ? NetworkImage(controller.userImage.value)
-                                  : const AssetImage(
-                                          'assets/images/default_profile.jpg')
-                                      as ImageProvider,
-                              radius: 24,
-                            )),
+                        CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.white,
+                          child: const Icon(Icons.person, color: Colors.grey),
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
@@ -79,11 +75,9 @@ class AccountView extends GetView<AccountController> {
                     ),
                   )),
               const SizedBox(height: 16),
-
-              // Menu List
               _buildListTile('History Transaction',
                   icon: Icons.history,
-                  onTap: () => Get.toNamed('/history-transaction')),
+                  onTap: () => Get.to(() => const HistoryTransactionView())),
               _buildListTile('Help Center',
                   onTap: () => Get.to(() => const HelpCenterView())),
               _buildListTile('Terms & Conditions',
@@ -98,8 +92,6 @@ class AccountView extends GetView<AccountController> {
               ),
               const Divider(thickness: 2, color: Colors.black),
               const SizedBox(height: 12),
-
-              // Feedback
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -156,8 +148,6 @@ class AccountView extends GetView<AccountController> {
                     )),
               ),
               const SizedBox(height: 170),
-
-              // Version & Logout
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../shop/controllers/shop_controller.dart';
+import 'package:get_storage/get_storage.dart';
 
 class MymenuController extends GetxController {
-  var username = 'Ryan'.obs;
+  var username = ''.obs;
 
   // Order type
   var selectedOrderType = 'Takeaway'.obs;
@@ -38,7 +39,16 @@ class MymenuController extends GetxController {
     super.onInit();
     fetchMenus();
     fetchRecommendedMenus();
-    Get.find<ShopController>().orderType.value = selectedOrderType.value;
+
+    final shopC = Get.find<ShopController>();
+
+    ever(selectedOrderType, (val) {
+      shopC.orderType.value = val;
+    });
+
+    // ✅ Ambil username dari GetStorage
+    final box = GetStorage();
+    username.value = box.read('username') ?? '';
   }
 
   void fetchMenus() async {
@@ -79,8 +89,9 @@ class MymenuController extends GetxController {
     }
   }
 
+  // (opsional, bisa tetap ada)
   void updateOrderType(String value) {
     selectedOrderType.value = value;
-    Get.find<ShopController>().orderType.value = value;
+    // Tidak perlu lagi set ShopController manual
   }
 }

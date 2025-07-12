@@ -50,7 +50,6 @@ class RegisterView extends GetView<RegisterController> {
     );
   }
 
-  // Text Field Umum
   Widget _buildTextField(String label, TextEditingController controllerField,
       {String? hintText}) {
     return Column(
@@ -77,7 +76,6 @@ class RegisterView extends GetView<RegisterController> {
     );
   }
 
-  // Nomor Ponsel
   Widget _buildPhoneField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +109,6 @@ class RegisterView extends GetView<RegisterController> {
     );
   }
 
-  // Password Field
   Widget _buildPasswordField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,19 +137,23 @@ class RegisterView extends GetView<RegisterController> {
               ),
             )),
         const SizedBox(height: 8),
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "✔ Min. 8 Karakter",
-            style: TextStyle(fontSize: 12),
-          ),
-        ),
+        Obx(() => Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Min. 8 Karakter",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: controller.passwordLength.value >= 8
+                      ? Colors.green
+                      : Colors.red,
+                ),
+              ),
+            )),
         const SizedBox(height: 16),
       ],
     );
   }
 
-  // Checkbox Persetujuan
   Widget _buildTermsCheckbox() {
     return Obx(() => Row(
           children: [
@@ -194,7 +195,6 @@ class RegisterView extends GetView<RegisterController> {
         ));
   }
 
-  // Tombol Submit
   Widget _buildSubmitButton() {
     return Obx(() => SizedBox(
           width: double.infinity,

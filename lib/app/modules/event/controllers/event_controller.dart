@@ -2,9 +2,10 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:get_storage/get_storage.dart';
 
 class EventController extends GetxController {
-  var username = 'Ryan'.obs;
+  var username = ''.obs;
   var selectedCategory = ''.obs;
   var searchQuery = ''.obs;
 
@@ -25,6 +26,12 @@ class EventController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    // ✅ Ambil username dari GetStorage
+    final box = GetStorage();
+    username.value = box.read('username') ?? '';
+
+    // ✅ Ambil data event dari API
     fetchEvents();
   }
 

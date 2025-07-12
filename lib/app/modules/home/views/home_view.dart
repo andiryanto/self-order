@@ -5,6 +5,7 @@ import 'package:self_order/app/modules/home_main/controllers/home_main_controlle
 import 'package:self_order/app/modules/mymenu/controllers/mymenu_controller.dart';
 import 'package:self_order/app/modules/notifics/controllers/notifics_controller.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:self_order/app/modules/account/controllers/account_controller.dart';
 
 const String _baseUrl = 'http://127.0.0.1:8000';
 
@@ -15,7 +16,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.lazyPut(() => MymenuController(), fenix: true);
     final notificsController = Get.put(NotificsController());
-
+    final accountC = Get.find<AccountController>();
     return GetBuilder<HomeController>(
       init: HomeController(),
       builder: (controller) {
@@ -57,15 +58,20 @@ class HomeView extends GetView<HomeController> {
                 );
               }),
               const SizedBox(width: 10),
-              GestureDetector(
-                onTap: () => Get.toNamed("/account")?.then((_) {
-                  controller.fetchQueueNumber(); // ✅ update setelah kembali
-                }),
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey[300],
-                  child: const Icon(Icons.person, color: Colors.black),
-                ),
-              ),
+              Obx(() {
+                final imageUrl = accountC.userImage.value;
+
+                return GestureDetector(
+                    onTap: () => Get.toNamed("/account")?.then((_) {
+                          controller.fetchQueueNumber();
+                          accountC.fetchUserData();
+                        }),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.grey[300],
+                      child: const Icon(Icons.person, color: Colors.white),
+                    ));
+              }),
               const SizedBox(width: 10),
             ],
           ),

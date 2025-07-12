@@ -11,7 +11,7 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Lupa Sandi?',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,

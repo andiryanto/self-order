@@ -12,28 +12,35 @@ class MyMenuView extends GetView<MymenuController> {
   Widget build(BuildContext context) {
     final c = Get.find<MymenuController>();
     final shopC = Get.find<ShopController>();
+    final notificsController = Get.put(NotificsController());
 
     final blackOutline = OutlineInputBorder(
       borderSide: const BorderSide(color: Colors.black),
       borderRadius: BorderRadius.circular(12),
     );
-    final notificsController = Get.put(NotificsController());
+
     void _openDetail(Map<String, dynamic> data) {
       final image = (data['image'] ?? '').toString();
       final imagePath = image.isNotEmpty
           ? 'http://127.0.0.1:8000/storage/$image'
           : 'assets/images/coffee.png';
 
-      // ✅ Fix: memastikan harga bisa di-parse walau formatnya string
       final rawPrice = data['price'];
-      final parsedPrice = rawPrice is int
-          ? rawPrice
-          : int.tryParse(rawPrice.toString().replaceAll('.', '')) ?? 0;
 
+      int parsedPrice;
+
+      if (rawPrice is int) {
+        parsedPrice = rawPrice;
+      } else if (rawPrice is String) {
+        // Tangani string desimal seperti "23000.00"
+        parsedPrice = double.tryParse(rawPrice)?.toInt() ?? 0;
+      } else {
+        parsedPrice = 0;
+      }
       Get.toNamed('/product-detail', arguments: {
         'name': data['name'],
         'desc': data['description'],
-        'price': data['price'],
+        'price': parsedPrice,
         'image': imagePath,
         'extras': data['extras'] ?? {},
       });
@@ -46,7 +53,7 @@ class MyMenuView extends GetView<MymenuController> {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Obx(() => Text(
-              'Halo, ${c.username.value}',
+              'Halo, ${c.username.value.isEmpty ? 'User' : c.username.value}',
               style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -74,12 +81,12 @@ class MyMenuView extends GetView<MymenuController> {
           }),
           const SizedBox(width: 10),
           GestureDetector(
-            onTap: () => Get.toNamed('/account'),
-            child: CircleAvatar(
-              backgroundColor: Colors.grey[300],
-              child: const Icon(Icons.person, color: Colors.black),
-            ),
-          ),
+              onTap: () => Get.toNamed('/account'),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.grey[300],
+                child: const Icon(Icons.person, color: Colors.white),
+              )),
           const SizedBox(width: 10),
         ],
       ),
@@ -138,7 +145,6 @@ class MyMenuView extends GetView<MymenuController> {
                     onChanged: (v) {
                       if (v != null) {
                         c.selectedOrderType.value = v;
-                        shopC.setOrderType(v);
                       }
                     },
                   ),
@@ -177,8 +183,22 @@ class MyMenuView extends GetView<MymenuController> {
             Obx(() {
               if (c.isLoading.value)
                 return const Center(child: CircularProgressIndicator());
+
               final list = c.filteredMenus;
-              if (list.isEmpty) return const SizedBox();
+              if (list.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32),
+                  child: Center(
+                    child: Column(
+                      children: const [
+                        SizedBox(height: 12),
+                        Text('Produk tidak ditemukan',
+                            style: TextStyle(fontSize: 16, color: Colors.grey)),
+                      ],
+                    ),
+                  ),
+                );
+              }
 
               final Map<String, List<Map<String, dynamic>>> grouped = {};
               for (final m in list) {

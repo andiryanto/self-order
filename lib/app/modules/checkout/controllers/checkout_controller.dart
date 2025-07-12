@@ -25,6 +25,7 @@ class CheckoutController extends GetxController {
       'gross_amount': subtotal,
       'name': 'Daffa', // nanti bisa pakai dari user login
       'email': 'daffa@example.com',
+      'type_transaction': shopC.orderType.value,
       'items': items,
     };
 
