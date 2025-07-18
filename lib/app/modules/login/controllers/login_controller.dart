@@ -46,6 +46,7 @@ class LoginController extends GetxController {
         if (res.statusCode == 200 && data['token'] != null) {
           // ✅ Login berhasil
           await box.write('token', data['token']);
+          await box.write('id', data['user']['id']); // ✅ Tambahkan baris ini
           await box.write('username', data['user']['name']);
           await box.write('phone', data['user']['phone']);
           await box.write('image', data['user']['profile_photo_url'] ?? '');
