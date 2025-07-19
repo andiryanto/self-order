@@ -4,13 +4,16 @@ import 'package:self_order/app/modules/about/views/about_view.dart';
 import 'package:self_order/app/modules/event/views/event_view.dart';
 import 'package:self_order/app/modules/home/views/home_view.dart';
 import 'package:self_order/app/modules/mymenu/views/mymenu_view.dart';
+import 'package:self_order/app/modules/shop/controllers/shop_controller.dart';
 import 'package:self_order/app/modules/shop/views/shop_view.dart';
 
 class HomeMainController extends GetxController {
-  //TODO: Implement HomeMainController
   var username = 'Ryan'.obs;
   RxInt currentIndex = 0.obs;
+  RxInt cartItemCount = 0.obs;
   final count = 0.obs;
+  final ShopController shopController = Get.find<ShopController>();
+
   List<Widget> page = [
     const HomeView(),
     EventView(),
@@ -23,10 +26,15 @@ class HomeMainController extends GetxController {
   void onInit() {
     super.onInit();
     fetchUserData();
+
+    ever(shopController.items, (_) {
+      cartItemCount.value = shopController.totalItemCount;
+    });
+
+    cartItemCount.value = shopController.totalItemCount;
   }
 
   void fetchUserData() {
-    // Simulasi: ambil dari backend / storage
     username.value = 'Ryan';
   }
 

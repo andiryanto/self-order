@@ -23,7 +23,8 @@ class ShopController extends GetxController {
   // ===== SUBTOTAL =====
   int get subtotal => items.fold(0, (sum, item) => sum + item.price * item.qty);
   String get subtotalLabel => _fmt.format(subtotal);
-
+  int get totalItems => items.fold(0, (sum, item) => sum + item.qty);
+  int get totalItemCount => items.fold(0, (total, item) => total + item.qty);
   String priceLabel(int price) => _fmt.format(price);
 
   bool get isEmpty => items.isEmpty;

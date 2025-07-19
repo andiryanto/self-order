@@ -26,7 +26,7 @@ class AccountController extends GetxController {
 
   void fetchUserData() {
     final box = GetStorage();
-    userName.value = box.read('username') ?? 'User';
+    userName.value = box.read('username') ?? '';
     userPhone.value = box.read('phone') ?? '';
     userImage.value = box.read('image') ?? '';
     print('DEBUG image_url: ${userImage.value}');

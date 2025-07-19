@@ -45,7 +45,6 @@ class MymenuController extends GetxController {
     ever(selectedOrderType, (val) {
       shopC.orderType.value = val;
     });
-
     // ✅ Ambil username dari GetStorage
     final box = GetStorage();
     username.value = box.read('username') ?? '';

@@ -8,8 +8,8 @@ import 'app/modules/account/controllers/account_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Get.put(ShopController(), permanent: true);
   Get.put(HomeMainController());
-  Get.lazyPut(() => ShopController(), fenix: true);
   Get.lazyPut(() => HistoryTransactionController(), fenix: true);
   Get.put(AccountController(), permanent: true);
 

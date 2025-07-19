@@ -25,20 +25,57 @@ class HomeMainView extends GetView<HomeMainController> {
           child: controller.page[controller.currentIndex.value],
         ),
         bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed, // Hindari efek shifting
+          type: BottomNavigationBarType.fixed,
           currentIndex: controller.currentIndex.value,
           onTap: controller.changeIndex,
           backgroundColor: Colors.white,
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.grey,
           elevation: 8,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Event'),
-            BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'Menu'),
+          items: [
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.home), label: 'Home'),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.event), label: 'Event'),
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.menu_book), label: 'Menu'),
+
+            // SHOP + badge
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_bag), label: 'Shop'),
-            BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
+              icon: Obx(() => Stack(
+                    children: [
+                      const Icon(Icons.shopping_bag),
+                      if (controller.cartItemCount.value > 0)
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 12,
+                              minHeight: 12,
+                            ),
+                            child: Text(
+                              controller.cartItemCount.value.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  )),
+              label: 'Shop',
+            ),
+
+            const BottomNavigationBarItem(
+                icon: Icon(Icons.info), label: 'About'),
           ],
         ),
       ),

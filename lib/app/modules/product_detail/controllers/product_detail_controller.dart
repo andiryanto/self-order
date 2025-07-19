@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../shop/controllers/shop_controller.dart';
 import '../../shop/models/shop_item_model.dart';
+import '../../home_main/controllers/home_main_controller.dart';
 
 class ProductDetailController extends GetxController {
   late final String productName;
@@ -84,6 +85,9 @@ class ProductDetailController extends GetxController {
       extras: List<String>.from(selectedExtras), // ✅ penting: salin extras
       note: note.value, // ✅ salin note juga
     ));
+
+    final homeC = Get.find<HomeMainController>();
+    homeC.cartItemCount.value = cart.totalItemCount;
 
     Get.back();
     Get.snackbar(
